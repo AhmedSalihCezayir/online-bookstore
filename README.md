@@ -1,1 +1,1 @@
-# online-bookstore
+# Online Bookstore as a Cloud Project
