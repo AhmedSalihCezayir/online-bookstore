@@ -1,9 +1,13 @@
 package bookstore.customer;
 
+import bookstore.address.Address;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -25,5 +29,9 @@ public class Customer {
 
     @Column(nullable = false)
     private String phoneNumber;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.REMOVE)
+    private List<Address> addresses;
 }
 
