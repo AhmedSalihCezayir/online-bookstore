@@ -1,6 +1,7 @@
 package bookstore.address;
 
 import bookstore.customer.Customer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "customerId", nullable = false)
     private Customer customer;
@@ -38,5 +40,10 @@ public class Address {
 
     @Column(nullable = false)
     private Date addedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        addedAt = new Date();
+    }
 }
 

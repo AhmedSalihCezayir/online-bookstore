@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,16 +19,16 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<Address> findAllByCustomer(Long customerId) {
-        return customerRepository.findById(customerId).get().getAddresses();
+        return addressRepository.findAllByCustomer_Id(customerId);
     }
 
     @Override
     public Address findByCustomerAndId(Long customerId, Long id) {
-        List<Address> addresses = customerRepository.findById(customerId).get().getAddresses();
-        return addresses.stream()
-                .filter(address -> address.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Address not found"));
+        Optional<Address> optionalAddress= addressRepository.findByCustomer_IdAndId(customerId, id);
+        if(optionalAddress.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Address not found");
+        }
+        return optionalAddress.get();
     }
 
     @Override
