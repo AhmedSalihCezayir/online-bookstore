@@ -1,6 +1,9 @@
 package bookstore.book;
 
+import bookstore.favourite.Favourite;
 import bookstore.genre.Genre;
+import bookstore.inventory.Inventory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -49,5 +52,13 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private List<Genre> genres;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
+    private List<Favourite> favourites;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "book", cascade = CascadeType.REMOVE)
+    private Inventory inventory;
 
 }
