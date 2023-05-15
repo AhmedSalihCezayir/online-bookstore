@@ -1,6 +1,5 @@
 package bookstore.address;
 
-import bookstore.customer.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

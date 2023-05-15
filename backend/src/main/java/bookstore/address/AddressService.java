@@ -1,7 +1,5 @@
 package bookstore.address;
 
-import bookstore.customer.Customer;
-
 import java.util.List;
 
 public interface AddressService {

@@ -1,7 +1,5 @@
 package bookstore.favourite;
 
-import bookstore.book.Book;
-
 import java.util.List;
 
 public interface FavouriteService {
