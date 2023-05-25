@@ -51,6 +51,7 @@ export const listProducts = (keyword = '') => async (
   }
 }
 
+
 export const listProductDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAILS_REQUEST })
