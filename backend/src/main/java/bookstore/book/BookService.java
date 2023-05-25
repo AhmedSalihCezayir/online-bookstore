@@ -1,6 +1,5 @@
 package bookstore.book;
 
-
 import java.util.List;
 
 public interface BookService {

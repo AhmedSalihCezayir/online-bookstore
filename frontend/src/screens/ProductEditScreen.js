@@ -12,18 +12,21 @@ import { PRODUCT_UPDATE_RESET } from '../constants/productConstants'
 const ProductEditScreen = ({ match, history }) => {
   const productId = match.params.id
 
-  const [name, setName] = useState('')
-  const [price, setPrice] = useState(0)
-  const [image, setImage] = useState('')
-  const [brand, setBrand] = useState('')
-  const [category, setCategory] = useState('')
+  const [title, setTitle] = useState('')
+  const [authorName, setAuthorName] = useState('')
+  const [publisher, setPublisher] = useState('')
+  const [publicationYear, setPublicationYear] = useState('')
   const [countInStock, setCountInStock] = useState(0)
-  const [description, setDescription] = useState('')
+  const [isbn, setIsbn] = useState('0000000000000')
+  const [pageNumber, setPageNumber] = useState(0)
+  const [price, setPrice] = useState(0)
+  const [genres, setGenres] = useState([])
   const [uploading, setUploading] = useState(false)
 
   const dispatch = useDispatch()
 
   const productDetails = useSelector((state) => state.productDetails)
+
   const { loading, error, product } = productDetails
 
   const productUpdate = useSelector((state) => state.productUpdate)
@@ -38,54 +41,58 @@ const ProductEditScreen = ({ match, history }) => {
       dispatch({ type: PRODUCT_UPDATE_RESET })
       history.push('/admin/productlist')
     } else {
-      if (!product.name || product._id !== productId) {
+      if (!product.title || product.id !== productId) {
         dispatch(listProductDetails(productId))
       } else {
-        setName(product.name)
-        setPrice(product.price)
-        setImage(product.image)
-        setBrand(product.brand)
-        setCategory(product.category)
+        setTitle(product.title)
+        setAuthorName(product.authorName)
+        setPublisher(product.publisher)
+        setPublicationYear(product.publicationYear)
         setCountInStock(product.countInStock)
-        setDescription(product.description)
+        setIsbn(product.isbn)
+        setPageNumber(product.pageNumber)
+        setPrice(product.price)
+        setGenres(product.genres)
       }
     }
-  }, [dispatch, history, productId, product, successUpdate])
+  }, [dispatch, history, productId, successUpdate])
 
-  const uploadFileHandler = async (e) => {
-    const file = e.target.files[0]
-    const formData = new FormData()
-    formData.append('image', file)
-    setUploading(true)
+  // const uploadFileHandler = async (e) => {
+  //   const file = e.target.files[0]
+  //   const formData = new FormData()
+  //   formData.append('image', file)
+  //   setUploading(true)
 
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
+  //   try {
+  //     const config = {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       },
+  //     }
 
-      const { data } = await axios.post('/api/upload', formData, config)
+  //     const { data } = await axios.post('/api/upload', formData, config)
 
-      setImage(data)
-      setUploading(false)
-    } catch (error) {
-      console.error(error)
-      setUploading(false)
-    }
-  }
+  //     // setImage(data)
+  //     setUploading(false)
+  //   } catch (error) {
+  //     console.error(error)
+  //     setUploading(false)
+  //   }
+  // }
 
   const submitHandler = (e) => {
     e.preventDefault()
     dispatch(
       updateProduct({
-        _id: productId,
-        name,
+        id: productId,
+        title,
+        authorName,
+        publisher,
+        publicationYear,
+        isbn,
+        pageNumber,
         price,
-        image,
-        brand,
-        category,
-        description,
+        genres: genres.map((genre) => genre.trim()), // Trim leading/trailing spaces for each genre,
         countInStock,
       })
     )
@@ -106,13 +113,73 @@ const ProductEditScreen = ({ match, history }) => {
           <Message variant='danger'>{error}</Message>
         ) : (
           <Form onSubmit={submitHandler}>
-            <Form.Group controlId='name'>
-              <Form.Label>Name</Form.Label>
+            <Form.Group controlId='title'>
+              <Form.Label>Title</Form.Label>
               <Form.Control
-                type='name'
-                placeholder='Enter name'
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                type='text'
+                placeholder='Enter title'
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='author'>
+              <Form.Label>Author</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter author name'
+                value={authorName}
+                onChange={(e) => setAuthorName(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='publisher'>
+              <Form.Label>Publisher</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter Publisher'
+                value={publisher}
+                onChange={(e) => setPublisher(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='countInStock'>
+              <Form.Label>Count In Stock</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='Enter countInStock'
+                value={countInStock}
+                onChange={(e) => setCountInStock(parseInt(e.target.value, 10))}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='publicationYear'>
+              <Form.Label>Year</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter publication year'
+                value={publicationYear}
+                onChange={(e) => setPublicationYear(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='ISBN'>
+              <Form.Label>ISBN</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter ISBN'
+                value={isbn}
+                onChange={(e) => setIsbn(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='pageNumber'>
+              <Form.Label>Page #</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='Enter page number'
+                value={pageNumber}
+                onChange={(e) => setPageNumber(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
@@ -126,60 +193,13 @@ const ProductEditScreen = ({ match, history }) => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId='image'>
-              <Form.Label>Image</Form.Label>
+            <Form.Group controlId='genres'>
+              <Form.Label>Genres</Form.Label>
               <Form.Control
                 type='text'
-                placeholder='Enter image url'
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-              ></Form.Control>
-              <Form.File
-                id='image-file'
-                label='Choose File'
-                custom
-                onChange={uploadFileHandler}
-              ></Form.File>
-              {uploading && <Loader />}
-            </Form.Group>
-
-            <Form.Group controlId='brand'>
-              <Form.Label>Brand</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter brand'
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId='countInStock'>
-              <Form.Label>Count In Stock</Form.Label>
-              <Form.Control
-                type='number'
-                placeholder='Enter countInStock'
-                value={countInStock}
-                onChange={(e) => setCountInStock(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId='category'>
-              <Form.Label>Category</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter category'
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId='description'>
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter description'
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                placeholder='Enter genres'
+                value={genres.join(', ')}
+                onChange={(e) => setGenres(e.target.value.split(','))}
               ></Form.Control>
             </Form.Group>
 

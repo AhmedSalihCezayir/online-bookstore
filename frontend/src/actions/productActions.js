@@ -21,14 +21,19 @@ import {
 } from '../constants/productConstants'
 import { logout } from './userActions'
 
-export const listProducts = (keyword = '', pageNumber = '') => async (
+//? ??????
+export const listProducts = (keyword = '') => async (
   dispatch
 ) => {
   try {
     dispatch({ type: PRODUCT_LIST_REQUEST })
 
+    // const { data } = await axios.get(
+    //   `/api/products?keyword=${keyword}`
+    // )
+
     const { data } = await axios.get(
-      `/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
+      `http://localhost:8080/api/v1/books`
     )
 
     dispatch({
@@ -46,11 +51,13 @@ export const listProducts = (keyword = '', pageNumber = '') => async (
   }
 }
 
+
 export const listProductDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAILS_REQUEST })
 
-    const { data } = await axios.get(`/api/products/${id}`)
+    // const { data } = await axios.get(`/api/books/${id}`)
+    const { data } = await axios.get(`http://localhost:8080/api/v1/books/${id}`)
 
     dispatch({
       type: PRODUCT_DETAILS_SUCCESS,
@@ -73,17 +80,19 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
       type: PRODUCT_DELETE_REQUEST,
     })
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
+    // const {
+    //   userLogin: { userInfo },
+    // } = getState()
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${userInfo.token}`,
+    //   },
+    // }
 
-    await axios.delete(`/api/products/${id}`, config)
+    // await axios.delete(`http://localhost:8080/api/v1/books/${id}`, config)
+
+    await axios.delete(`http://localhost:8080/api/v1/books/${id}`)
 
     dispatch({
       type: PRODUCT_DELETE_SUCCESS,
@@ -109,17 +118,31 @@ export const createProduct = () => async (dispatch, getState) => {
       type: PRODUCT_CREATE_REQUEST,
     })
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
+    // const {
+    //   userLogin: { userInfo },
+    // } = getState()
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${userInfo.token}`,
+    //   },
+    // }
+
+    // const { data } = await axios.post(`http://localhost:8080/api/v1/books`, {}, config)
+
+    const newBook = {
+      "title": "",
+      "authorName": "",
+      "publisher": "",
+      "publicationYear": "",
+      "isbn": "0000000000000",
+      "pageNumber": 0,
+      "price": 0,
+      "countVisit": 0,
+      "genres": []
     }
 
-    const { data } = await axios.post(`/api/products`, {}, config)
+    const { data } = await axios.post(`http://localhost:8080/api/v1/books`, newBook)
 
     dispatch({
       type: PRODUCT_CREATE_SUCCESS,
@@ -146,22 +169,44 @@ export const updateProduct = (product) => async (dispatch, getState) => {
       type: PRODUCT_UPDATE_REQUEST,
     })
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
+    // const {
+    //   userLogin: { userInfo },
+    // } = getState()
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
+    // const config = {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: `Bearer ${userInfo.token}`,
+    //   },
+    // }
+
+    // const { data } = await axios.put(
+    //   `http://localhost:8080/api/v1/books/${product.id}`,
+    //   product,
+    //   config
+    // )
+
+    const inventoryUpdate = {
+      "quantity": product.countInStock,
+      "purchasePrice": 0
     }
 
-    const { data } = await axios.put(
-      `/api/products/${product._id}`,
-      product,
-      config
+    console.log("PRODUCT", product)
+    console.log("INVENTORY", inventoryUpdate)
+
+    delete product.countInStock
+    delete product.genres
+
+    const { data } = await axios.post(
+      `http://localhost:8080/api/v1/books`,
+      product
     )
+
+    // //TODO: update inventory
+    // const { data2 } = await axios.post(
+    //   `http://localhost:8080/api/v1/inventories/${product.id}/restock`,
+    //   inventoryUpdate
+    // )
 
     dispatch({
       type: PRODUCT_UPDATE_SUCCESS,
@@ -187,7 +232,9 @@ export const listTopProducts = () => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_TOP_REQUEST })
 
-    const { data } = await axios.get(`/api/products/top`)
+    const { data } = await axios.get(`http://localhost:8080/api/v1/books`)
+
+    data.filter((product) => product.countVisited >= 0)
 
     dispatch({
       type: PRODUCT_TOP_SUCCESS,

@@ -1,7 +1,8 @@
 package bookstore.customer;
 
-import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.util.List;
 
 public interface CustomerService {
     List<Customer> findAll();

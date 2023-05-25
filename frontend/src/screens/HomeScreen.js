@@ -13,27 +13,26 @@ import { listProducts } from '../actions/productActions'
 const HomeScreen = ({ match }) => {
   const keyword = match.params.keyword
 
-  const pageNumber = match.params.pageNumber || 1
-
   const dispatch = useDispatch()
 
   const productList = useSelector((state) => state.productList)
-  const { loading, error, products, page, pages } = productList
+  const { loading, error, products} = productList
 
   useEffect(() => {
-    dispatch(listProducts(keyword, pageNumber))
-  }, [dispatch, keyword, pageNumber])
+    // dispatch(listProducts(keyword))
+    dispatch(listProducts(''))
+  }, [dispatch])
 
   return (
     <>
       <Meta />
-      {!keyword ? (
+      {/* {!keyword ? (
         <ProductCarousel />
       ) : (
         <Link to='/' className='btn btn-light'>
           Go Back
         </Link>
-      )}
+      )} */}
       <h1>Latest Products</h1>
       {loading ? (
         <Loader />
@@ -48,11 +47,6 @@ const HomeScreen = ({ match }) => {
               </Col>
             ))}
           </Row>
-          <Paginate
-            pages={pages}
-            page={page}
-            keyword={keyword ? keyword : ''}
-          />
         </>
       )}
     </>

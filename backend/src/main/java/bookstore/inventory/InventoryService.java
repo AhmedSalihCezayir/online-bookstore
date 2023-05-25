@@ -1,5 +1,7 @@
 package bookstore.inventory;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import java.util.List;
 
 public interface InventoryService {

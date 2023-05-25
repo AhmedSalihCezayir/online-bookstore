@@ -120,17 +120,18 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
       type: USER_DETAILS_REQUEST,
     })
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
+    // const {
+    //   userLogin: { userInfo },
+    // } = getState()
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${userInfo.token}`,
+    //   },
+    // }
 
-    const { data } = await axios.get(`/api/users/${id}`, config)
+    // const { data } = await axios.get(`/api/customers/${id}`, config)
+    const { data } = await axios.get(`http://localhost:8080/api/v1/customers/${id}`)
 
     dispatch({
       type: USER_DETAILS_SUCCESS,
@@ -200,17 +201,18 @@ export const listUsers = () => async (dispatch, getState) => {
       type: USER_LIST_REQUEST,
     })
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
+    // const {
+    //   userLogin: { userInfo },
+    // } = getState()
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${userInfo.token}`,
+    //   },
+    // }
 
-    const { data } = await axios.get(`/api/users`, config)
+    // const { data } = await axios.get(`/api/customers`, config)
+    const { data } = await axios.get(`http://localhost:8080/api/v1/customers`)
 
     dispatch({
       type: USER_LIST_SUCCESS,
@@ -237,17 +239,19 @@ export const deleteUser = (id) => async (dispatch, getState) => {
       type: USER_DELETE_REQUEST,
     })
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
+    // const {
+    //   userLogin: { userInfo },
+    // } = getState()
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${userInfo.token}`,
+    //   },
+    // }
 
-    await axios.delete(`/api/users/${id}`, config)
+    // await axios.delete(`/api/customers/${id}`, config)
+
+    const { data } = await axios.delete(`http://localhost:8080/api/v1/customers/${id}`)
 
     dispatch({ type: USER_DELETE_SUCCESS })
   } catch (error) {
@@ -271,19 +275,20 @@ export const updateUser = (user) => async (dispatch, getState) => {
       type: USER_UPDATE_REQUEST,
     })
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
+    // const {
+    //   userLogin: { userInfo },
+    // } = getState()
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
+    // const config = {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: `Bearer ${userInfo.token}`,
+    //   },
+    // }
 
-    const { data } = await axios.put(`/api/users/${user._id}`, user, config)
+    // const { data } = await axios.post(`/api/customers/`, user, config)
 
+    const { data } = await axios.post(`http://localhost:8080/api/v1/customers`, user)
     dispatch({ type: USER_UPDATE_SUCCESS })
 
     dispatch({ type: USER_DETAILS_SUCCESS, payload: data })

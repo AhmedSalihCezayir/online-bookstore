@@ -13,12 +13,11 @@ import {
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 
 const ProductListScreen = ({ history, match }) => {
-  const pageNumber = match.params.pageNumber || 1
 
   const dispatch = useDispatch()
 
   const productList = useSelector((state) => state.productList)
-  const { loading, error, products, page, pages } = productList
+  const { loading, error, products } = productList
 
   const productDelete = useSelector((state) => state.productDelete)
   const {
@@ -41,14 +40,18 @@ const ProductListScreen = ({ history, match }) => {
   useEffect(() => {
     dispatch({ type: PRODUCT_CREATE_RESET })
 
-    if (!userInfo || !userInfo.isAdmin) {
-      history.push('/login')
-    }
+    // if (!userInfo || !userInfo.isAdmin) {
+    //   history.push('/login')
+    // }
+
+    // if (!userInfo) {
+    //   history.push('/login')
+    // }
 
     if (successCreate) {
-      history.push(`/admin/product/${createdProduct._id}/edit`)
+      history.push(`/admin/product/${createdProduct.id}/edit`)
     } else {
-      dispatch(listProducts('', pageNumber))
+      dispatch(listProducts(''))
     }
   }, [
     dispatch,
@@ -57,7 +60,6 @@ const ProductListScreen = ({ history, match }) => {
     successDelete,
     successCreate,
     createdProduct,
-    pageNumber,
   ])
 
   const deleteHandler = (id) => {
@@ -97,22 +99,30 @@ const ProductListScreen = ({ history, match }) => {
               <tr>
                 <th>ID</th>
                 <th>NAME</th>
+                <th>AUTHOR</th>
+                <th>PUBLISHER</th>
+                <th>YEAR</th>
+                <th>ISBN</th>
+                <th>PAGE #</th>
                 <th>PRICE</th>
-                <th>CATEGORY</th>
-                <th>BRAND</th>
+                <th>GENRE</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
               {products.map((product) => (
-                <tr key={product._id}>
-                  <td>{product._id}</td>
-                  <td>{product.name}</td>
+                <tr key={product.id}>
+                  <td>{product.id}</td>
+                  <td>{product.title}</td>
+                  <td>{product.authorName}</td>
+                  <td>{product.publisher}</td>
+                  <td>{product.publicationYear}</td>
+                  <td>{product.isbn}</td>
+                  <td>{product.pageNumber}</td>
                   <td>${product.price}</td>
-                  <td>{product.category}</td>
-                  <td>{product.brand}</td>
+                  <td>{product.genres}</td>
                   <td>
-                    <LinkContainer to={`/admin/product/${product._id}/edit`}>
+                    <LinkContainer to={`/admin/product/${product.id}/edit`}>
                       <Button variant='light' className='btn-sm'>
                         <i className='fas fa-edit'></i>
                       </Button>
@@ -120,7 +130,7 @@ const ProductListScreen = ({ history, match }) => {
                     <Button
                       variant='danger'
                       className='btn-sm'
-                      onClick={() => deleteHandler(product._id)}
+                      onClick={() => deleteHandler(product.id)}
                     >
                       <i className='fas fa-trash'></i>
                     </Button>
@@ -129,7 +139,6 @@ const ProductListScreen = ({ history, match }) => {
               ))}
             </tbody>
           </Table>
-          <Paginate pages={pages} page={page} isAdmin={true} />
         </>
       )}
     </>

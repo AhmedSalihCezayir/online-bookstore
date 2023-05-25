@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class Book {
     @Column(nullable = false)
     private String publicationYear;
 
-    @Column(nullable = false, length = 13, unique = true)
+    @Column(nullable = false, length = 13)
     @Size(min = 13, max = 13, message = "ISBN must be exactly 13 characters long")
     private String isbn;
 

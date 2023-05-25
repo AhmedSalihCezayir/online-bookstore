@@ -28,11 +28,14 @@ const UserEditScreen = ({ match, history }) => {
   } = userUpdate
 
   useEffect(() => {
+    console.log("User id: ", userId)
+    console.log("user.id: ", user.id)
+    console.log("User.name: ", user.name)
     if (successUpdate) {
       dispatch({ type: USER_UPDATE_RESET })
       history.push('/admin/userlist')
     } else {
-      if (!user.name || user._id !== userId) {
+      if (!user.name || user.id !== userId) {
         dispatch(getUserDetails(userId))
       } else {
         setName(user.name)
@@ -40,11 +43,11 @@ const UserEditScreen = ({ match, history }) => {
         setIsAdmin(user.isAdmin)
       }
     }
-  }, [dispatch, history, userId, user, successUpdate])
+  }, [dispatch, history, userId, successUpdate])
 
   const submitHandler = (e) => {
     e.preventDefault()
-    dispatch(updateUser({ _id: userId, name, email, isAdmin }))
+    dispatch(updateUser({ id: userId, name, email, isAdmin }))
   }
 
   return (
