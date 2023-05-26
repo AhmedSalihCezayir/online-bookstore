@@ -1,6 +1,9 @@
 package bookstore.book;
 
-import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 public interface BookService {
 
