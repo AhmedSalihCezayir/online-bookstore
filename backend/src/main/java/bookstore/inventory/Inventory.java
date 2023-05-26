@@ -18,7 +18,7 @@ public class Inventory {
     private Long id;
 
     @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "bookId", nullable = false)
+    @JoinColumn(name = "bookId", unique = true, nullable = false)
     private Book book;
 
     @Column(nullable = false)
