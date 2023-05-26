@@ -1,11 +1,13 @@
 package bookstore.book;
 
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 public interface BookService {
 
-    List<Book> findAll();
+    Page<Book> findBooksByCriteria(String title, String author, String publisher, String publicationYear, String orderBy, Long genreId, Pageable pageable);
 
     Book findById(Long id);
 
