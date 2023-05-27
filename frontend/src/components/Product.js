@@ -20,9 +20,9 @@ const Product = ({ history, product}) => {
         <Card.Text>Price: ${product.price}</Card.Text>
         <Card.Text>Status: {product.countInStock > 0 ? 'In Stock' : 'Out Of Stock'}</Card.Text>
         
-        {product.countInStock > 0 && (
+        {/* {product.countInStock > 0 && ( */}
         <ListGroup variant='flush'>
-          <ListGroup.Item>
+          {/* <ListGroup.Item>
             <Row>
               <Col>Qty</Col>
               <Col>
@@ -41,19 +41,18 @@ const Product = ({ history, product}) => {
                 </Form.Control>
               </Col>
             </Row>
-          </ListGroup.Item>
+          </ListGroup.Item> */}
           <ListGroup.Item>
           <Button
             onClick={addToCartHandler}
             className='btn-block'
             type='button'
-            disabled={product.countInStock === 0}
           >
             Add To Cart
           </Button>
         </ListGroup.Item>
       </ListGroup>
-      )}
+      {/* )} */}
       </Card.Body>
     </Card>
   )
