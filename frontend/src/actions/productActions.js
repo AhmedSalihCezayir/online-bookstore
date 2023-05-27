@@ -22,7 +22,7 @@ import {
 import { logout } from './userActions'
 
 //? ??????
-export const listProducts = (keyword = '') => async (
+export const listProducts = (keyword = '', pageNumber = 1) => async (
   dispatch
 ) => {
   try {
@@ -33,9 +33,9 @@ export const listProducts = (keyword = '') => async (
     // )
 
     const { data } = await axios.get(
-      `http://localhost:8080/api/v1/books`
+      `http://localhost:8080/api/v1/books?page=${pageNumber}&size=10`
     )
-
+    
     dispatch({
       type: PRODUCT_LIST_SUCCESS,
       payload: data,
@@ -194,8 +194,41 @@ export const updateProduct = (product) => async (dispatch, getState) => {
     console.log("PRODUCT", product)
     console.log("INVENTORY", inventoryUpdate)
 
-    delete product.countInStock
-    delete product.genres
+    //get genres
+    let genresInDB = await axios.get(
+      `http://localhost:8080/api/v1/genres`,
+    )
+
+    genresInDB = genresInDB.data
+    
+    let newGenre = []
+    let updatedGenresOfBook = []
+
+    //get genres of product
+    product.genres.forEach(async (genreName) => {
+      let matchingGenre = genresInDB.find((genre) => genre.name.toLowerCase() === genreName.toLowerCase());
+      if (!matchingGenre) {
+        // Genre doesn't exist in the database, add it
+        newGenre = { name: genreName };
+        console.log("newGenre", newGenre)
+        let { data } = await axios.post(
+          `http://localhost:8080/api/v1/genres`,
+          newGenre
+        ) // Now new genre have an id
+
+        // get genres
+        let genresInDBTemp = await axios.get(
+          `http://localhost:8080/api/v1/genres`,
+        )
+
+        genresInDBTemp = genresInDBTemp.data
+        let matchingGenre = genresInDBTemp.find((genre) => genre.name.toLowerCase() === genreName.toLowerCase());
+        matchingGenre = newGenre;
+      }
+      updatedGenresOfBook.push(matchingGenre);
+    });
+    
+    product.genres = updatedGenresOfBook;
 
     const { data } = await axios.post(
       `http://localhost:8080/api/v1/books`,

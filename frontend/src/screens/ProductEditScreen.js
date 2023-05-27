@@ -20,7 +20,8 @@ const ProductEditScreen = ({ match, history }) => {
   const [isbn, setIsbn] = useState('0000000000000')
   const [pageNumber, setPageNumber] = useState(0)
   const [price, setPrice] = useState(0)
-  const [genres, setGenres] = useState([])
+  const [genres, setGenres] = useState([''])
+  const [tempGenre, setTempGenre] = useState(''); // New state variable to store the temporary genre value
   const [uploading, setUploading] = useState(false)
 
   const dispatch = useDispatch()
@@ -42,7 +43,11 @@ const ProductEditScreen = ({ match, history }) => {
       history.push('/admin/productlist')
     } else {
       if (!product.title || product.id !== productId) {
+        console.log("GENRES in if", product.genres)
+        console.log("product.id", product.id)
+        console.log("productId", productId)
         dispatch(listProductDetails(productId))
+
       } else {
         setTitle(product.title)
         setAuthorName(product.authorName)
@@ -53,6 +58,7 @@ const ProductEditScreen = ({ match, history }) => {
         setPageNumber(product.pageNumber)
         setPrice(product.price)
         setGenres(product.genres)
+        console.log("GENRES in else", product.genres)
       }
     }
   }, [dispatch, history, productId, successUpdate])
@@ -81,7 +87,11 @@ const ProductEditScreen = ({ match, history }) => {
   // }
 
   const submitHandler = (e) => {
-    e.preventDefault()
+    e.preventDefault();
+
+    const newGenres = tempGenre.split(',').map((genre) => genre.trim());
+    const updatedGenres = [...newGenres];
+    
     dispatch(
       updateProduct({
         id: productId,
@@ -92,10 +102,11 @@ const ProductEditScreen = ({ match, history }) => {
         isbn,
         pageNumber,
         price,
-        genres: genres.map((genre) => genre.trim()), // Trim leading/trailing spaces for each genre,
+        genres: updatedGenres,
         countInStock,
       })
     )
+    setTempGenre(''); // Clear the tempGenre state
   }
 
   return (
@@ -198,8 +209,8 @@ const ProductEditScreen = ({ match, history }) => {
               <Form.Control
                 type='text'
                 placeholder='Enter genres'
-                value={genres.join(', ')}
-                onChange={(e) => setGenres(e.target.value.split(','))}
+                value={tempGenre}
+                onChange={(e) => setTempGenre(e.target.value)}
               ></Form.Control>
             </Form.Group>
 

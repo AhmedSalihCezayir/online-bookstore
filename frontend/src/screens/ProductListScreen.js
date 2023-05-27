@@ -13,11 +13,12 @@ import {
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 
 const ProductListScreen = ({ history, match }) => {
+  const pageNumber = match.params.pageNumber || 0
 
   const dispatch = useDispatch()
 
   const productList = useSelector((state) => state.productList)
-  const { loading, error, products } = productList
+  const { loading, error, products, page, pages } = productList
 
   const productDelete = useSelector((state) => state.productDelete)
   const {
@@ -51,7 +52,7 @@ const ProductListScreen = ({ history, match }) => {
     if (successCreate) {
       history.push(`/admin/product/${createdProduct.id}/edit`)
     } else {
-      dispatch(listProducts(''))
+      dispatch(listProducts('', pageNumber))
     }
   }, [
     dispatch,
@@ -120,7 +121,7 @@ const ProductListScreen = ({ history, match }) => {
                   <td>{product.isbn}</td>
                   <td>{product.pageNumber}</td>
                   <td>${product.price}</td>
-                  <td>{product.genres}</td>
+                  <td>{product.genres.map(genre => genre.name).join(', ')}</td>
                   <td>
                     <LinkContainer to={`/admin/product/${product.id}/edit`}>
                       <Button variant='light' className='btn-sm'>
@@ -139,6 +140,7 @@ const ProductListScreen = ({ history, match }) => {
               ))}
             </tbody>
           </Table>
+          <Paginate pages={pages} page={page} isAdmin={true} />
         </>
       )}
     </>
