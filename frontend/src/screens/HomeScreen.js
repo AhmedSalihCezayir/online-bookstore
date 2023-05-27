@@ -13,7 +13,7 @@ import { listProducts } from '../actions/productActions'
 const HomeScreen = ({ match }) => {
   const keyword = match.params.keyword
 
-  const pageNumber = match.params.pageNumber || 1
+  const pageNumber = match.params.pageNumber || 0
 
   const dispatch = useDispatch()
 
@@ -21,20 +21,19 @@ const HomeScreen = ({ match }) => {
   const { loading, error, products, page, pages } = productList
 
   useEffect(() => {
-    // dispatch(listProducts(keyword))
     dispatch(listProducts('', pageNumber))
   }, [dispatch, pageNumber])
 
   return (
     <>
       <Meta />
-      {/* {!keyword ? (
+      {!keyword ? (
         <ProductCarousel />
       ) : (
         <Link to='/' className='btn btn-light'>
           Go Back
         </Link>
-      )} */}
+      )}
       <h1>Latest Products</h1>
       {loading ? (
         <Loader />
@@ -44,7 +43,7 @@ const HomeScreen = ({ match }) => {
         <>
           <Row>
             {products.map((product) => (
-              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+              <Col key={product.id} sm={12} md={6} lg={4} xl={3}>
                 <Product product={product} />
               </Col>
             ))}

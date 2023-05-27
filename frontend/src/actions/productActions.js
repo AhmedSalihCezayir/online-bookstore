@@ -21,8 +21,7 @@ import {
 } from '../constants/productConstants'
 import { logout } from './userActions'
 
-//? ??????
-export const listProducts = (keyword = '', pageNumber = 1) => async (
+export const listProducts = (keyword = '', pageNumber = 1, ifBook = true) => async (
   dispatch
 ) => {
   try {
@@ -32,8 +31,43 @@ export const listProducts = (keyword = '', pageNumber = 1) => async (
     //   `/api/products?keyword=${keyword}`
     // )
 
+    let info = {}
+    if(ifBook){
+      const { data } = await axios.get(
+        `http://localhost:8080/api/v1/books?page=${pageNumber}&size=10`
+      )
+      info = data
+    } else {
+      // Get every inventory
+      const { data } = await axios.get(
+        "http://localhost:8080/api/v1/inventories"
+      )
+      info = data
+    }
+
+    dispatch({
+      type: PRODUCT_LIST_SUCCESS,
+      payload: info,
+    })
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const listProductsByVisited = (keyword = '', pageNumber = 1) => async (
+  dispatch
+) => {
+  try {
+    dispatch({ type: PRODUCT_LIST_REQUEST })
+
     const { data } = await axios.get(
-      `http://localhost:8080/api/v1/books?page=${pageNumber}&size=10`
+      `http://localhost:8080/api/v1/books?orderBy=countVisit&page=${pageNumber}&size=10`
     )
     
     dispatch({
@@ -51,13 +85,14 @@ export const listProducts = (keyword = '', pageNumber = 1) => async (
   }
 }
 
-
 export const listProductDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAILS_REQUEST })
 
     // const { data } = await axios.get(`/api/books/${id}`)
     const { data } = await axios.get(`http://localhost:8080/api/v1/books/${id}`)
+
+    // const result = await axios.post(`http://localhost:8080/api/v1/books/${id}`)
 
     dispatch({
       type: PRODUCT_DETAILS_SUCCESS,
@@ -93,6 +128,7 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
     // await axios.delete(`http://localhost:8080/api/v1/books/${id}`, config)
 
     await axios.delete(`http://localhost:8080/api/v1/books/${id}`)
+    
 
     dispatch({
       type: PRODUCT_DELETE_SUCCESS,
@@ -139,10 +175,20 @@ export const createProduct = () => async (dispatch, getState) => {
       "pageNumber": 0,
       "price": 0,
       "countVisit": 0,
-      "genres": []
+      "genres": [],
     }
 
-    const { data } = await axios.post(`http://localhost:8080/api/v1/books`, newBook)
+    let { data } = await axios.post(`http://localhost:8080/api/v1/books`, newBook)
+    console.log("DATA IN CREATE BOOK", data)
+
+    const newInventory = {
+      book: data,
+      "countInStock": 0,
+      "quantity": 0,
+    }
+
+    const result = await axios.post(`http://localhost:8080/api/v1/inventories`, newInventory)
+    console.log("INVENTORY IN CREATE BOOK", result)
 
     dispatch({
       type: PRODUCT_CREATE_SUCCESS,
@@ -186,13 +232,12 @@ export const updateProduct = (product) => async (dispatch, getState) => {
     //   config
     // )
 
+    //TODO: update inventory
+    
     const inventoryUpdate = {
       "quantity": product.countInStock,
       "purchasePrice": 0
     }
-
-    console.log("PRODUCT", product)
-    console.log("INVENTORY", inventoryUpdate)
 
     //get genres
     let genresInDB = await axios.get(
@@ -210,7 +255,7 @@ export const updateProduct = (product) => async (dispatch, getState) => {
       if (!matchingGenre) {
         // Genre doesn't exist in the database, add it
         newGenre = { name: genreName };
-        console.log("newGenre", newGenre)
+        
         let { data } = await axios.post(
           `http://localhost:8080/api/v1/genres`,
           newGenre
@@ -235,11 +280,7 @@ export const updateProduct = (product) => async (dispatch, getState) => {
       product
     )
 
-    // //TODO: update inventory
-    // const { data2 } = await axios.post(
-    //   `http://localhost:8080/api/v1/inventories/${product.id}/restock`,
-    //   inventoryUpdate
-    // )
+    
 
     dispatch({
       type: PRODUCT_UPDATE_SUCCESS,

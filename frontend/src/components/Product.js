@@ -1,27 +1,66 @@
+import axios from 'axios'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Card } from 'react-bootstrap'
+import { Card, Button, Row, Col, ListGroup, Form } from 'react-bootstrap'
 
-const Product = ({ product }) => {
+const Product = ({ history, product}) => {
+  const [qty, setQty] = React.useState(1)
+
+  const addToCartHandler = () => {
+    history.push(`/cart/${product.id}?qty=${qty}`)
+  }
+
   return (
     <Card className='my-3 p-3 rounded'>
-      <Link to={`/product/${product._id}`}>
-        <Card.Img src={product.image} variant='top' />
-      </Link>
-
+      <Card.Text as='h3'>{product.title}</Card.Text>
       <Card.Body>
-        <Link to={`/product/${product._id}`}>
-          <Card.Title as='div'>
-            <strong>{product.title}</strong>
-          </Card.Title>
-        </Link>
-
-        <Card.Text as='h3'>${product.author_name}</Card.Text>
-
-        <Card.Text as='h3'>${product.price}</Card.Text>
+        <Card.Text>Author: {product.authorName}</Card.Text>
+        <Card.Text>Page No: {product.pageNumber}</Card.Text>
+        <Card.Text>Genres: {product.genres.map(genre => genre.name).join(', ')}</Card.Text>
+        <Card.Text>Price: ${product.price}</Card.Text>
+        <Card.Text>Status: {product.countInStock > 0 ? 'In Stock' : 'Out Of Stock'}</Card.Text>
+        
+        {product.countInStock > 0 && (
+        <ListGroup variant='flush'>
+          <ListGroup.Item>
+            <Row>
+              <Col>Qty</Col>
+              <Col>
+                <Form.Control
+                  as='select'
+                  value={qty}
+                  onChange={(e) => setQty(e.target.value)}
+                >
+                  {[...Array(product.countInStock).keys()].map(
+                    (x) => (
+                      <option key={x + 1} value={x + 1}>
+                        {x + 1}
+                      </option>
+                    )
+                  )}
+                </Form.Control>
+              </Col>
+            </Row>
+          </ListGroup.Item>
+          <ListGroup.Item>
+          <Button
+            onClick={addToCartHandler}
+            className='btn-block'
+            type='button'
+            disabled={product.countInStock === 0}
+          >
+            Add To Cart
+          </Button>
+        </ListGroup.Item>
+      </ListGroup>
+      )}
       </Card.Body>
     </Card>
   )
 }
 
-export default Product
+export default Product;
+
+
+
+
