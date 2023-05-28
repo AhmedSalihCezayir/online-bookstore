@@ -10,6 +10,8 @@ public interface InventoryService {
 
     Inventory addItem(Inventory inventory);
 
+    Inventory findById(Long id);
+
     Inventory restockItem(Long inventoryId, Integer quantity, Double purchasePrice);
 
     void deleteItem(Long inventoryId);

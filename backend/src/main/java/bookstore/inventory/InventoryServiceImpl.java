@@ -41,6 +41,16 @@ public class InventoryServiceImpl implements InventoryService{
     }
 
     @Override
+    public Inventory findById(Long id) {
+        Optional<Inventory> inventoryBook = inventoryRepository.findById(id);
+        if (inventoryBook.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
+        }
+        Inventory inventory = inventoryBook.get();
+        return inventory;
+    }
+
+    @Override
     public void deleteItem(Long id) {
         if(!inventoryRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Inventory item not found");

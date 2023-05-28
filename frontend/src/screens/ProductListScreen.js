@@ -13,7 +13,7 @@ import {
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 
 const ProductListScreen = ({ history, match }) => {
-  const pageNumber = match.params.pageNumber || 0
+  // const pageNumber = match.params.pageNumber || 0
 
   const dispatch = useDispatch()
 
@@ -52,7 +52,7 @@ const ProductListScreen = ({ history, match }) => {
     if (successCreate) {
       history.push(`/admin/product/${createdProduct.id}/edit`)
     } else {
-      dispatch(listProducts('', pageNumber))
+      dispatch(listProducts('', 1, false))
     }
   }, [
     dispatch,
@@ -63,9 +63,13 @@ const ProductListScreen = ({ history, match }) => {
     createdProduct,
   ])
 
-  const deleteHandler = (id) => {
+  const deleteHandler = (id, bookId) => {
+    const ids = {
+      inventoryId: id,
+      bookId: bookId
+    }
     if (window.confirm('Are you sure')) {
-      dispatch(deleteProduct(id))
+      dispatch(deleteProduct(ids))
     }
   }
 
@@ -107,21 +111,23 @@ const ProductListScreen = ({ history, match }) => {
                 <th>PAGE #</th>
                 <th>PRICE</th>
                 <th>GENRE</th>
+                <th>QTY</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
               {products.map((product) => (
                 <tr key={product.id}>
-                  <td>{product.id}</td>
-                  <td>{product.title}</td>
-                  <td>{product.authorName}</td>
-                  <td>{product.publisher}</td>
-                  <td>{product.publicationYear}</td>
-                  <td>{product.isbn}</td>
-                  <td>{product.pageNumber}</td>
-                  <td>${product.price}</td>
-                  <td>{product.genres.map(genre => genre.name).join(', ')}</td>
+                  <td>{product.book.id}</td>
+                  <td>{product.book.title}</td>
+                  <td>{product.book.authorName}</td>
+                  <td>{product.book.publisher}</td>
+                  <td>{product.book.publicationYear}</td>
+                  <td>{product.book.isbn}</td>
+                  <td>{product.book.pageNumber}</td>
+                  <td>${product.book.price}</td>
+                  <td>{product.book.genres.map(genre => genre.name).join(', ')}</td>
+                  <td>{product.quantity}</td>
                   <td>
                     <LinkContainer to={`/admin/product/${product.id}/edit`}>
                       <Button variant='light' className='btn-sm'>
@@ -131,7 +137,7 @@ const ProductListScreen = ({ history, match }) => {
                     <Button
                       variant='danger'
                       className='btn-sm'
-                      onClick={() => deleteHandler(product.id)}
+                      onClick={() => deleteHandler(product.id, product.book.id)}
                     >
                       <i className='fas fa-trash'></i>
                     </Button>
@@ -140,7 +146,7 @@ const ProductListScreen = ({ history, match }) => {
               ))}
             </tbody>
           </Table>
-          <Paginate pages={pages} page={page} isAdmin={true} />
+          {/* <Paginate pages={pages} page={page} isAdmin={true} /> */}
         </>
       )}
     </>

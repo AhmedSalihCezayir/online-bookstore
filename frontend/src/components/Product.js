@@ -18,7 +18,7 @@ const Product = ({ history, product}) => {
         <Card.Text>Page No: {product.pageNumber}</Card.Text>
         <Card.Text>Genres: {product.genres.map(genre => genre.name).join(', ')}</Card.Text>
         <Card.Text>Price: ${product.price}</Card.Text>
-        <Card.Text>Status: {product.countInStock > 0 ? 'In Stock' : 'Out Of Stock'}</Card.Text>
+        <Card.Text>Status: {product.quantity > 0 ? 'In Stock' : 'Out Of Stock'}</Card.Text>
         
         {/* {product.countInStock > 0 && ( */}
         <ListGroup variant='flush'>

@@ -89,10 +89,7 @@ export const listProductDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAILS_REQUEST })
 
-    // const { data } = await axios.get(`/api/books/${id}`)
-    const { data } = await axios.get(`http://localhost:8080/api/v1/books/${id}`)
-
-    // const result = await axios.post(`http://localhost:8080/api/v1/books/${id}`)
+    const { data } = await axios.get(`http://localhost:8080/api/v1/inventories/${id}`)
 
     dispatch({
       type: PRODUCT_DETAILS_SUCCESS,
@@ -109,7 +106,7 @@ export const listProductDetails = (id) => async (dispatch) => {
   }
 }
 
-export const deleteProduct = (id) => async (dispatch, getState) => {
+export const deleteProduct = (ids) => async (dispatch, getState) => {
   try {
     dispatch({
       type: PRODUCT_DELETE_REQUEST,
@@ -127,9 +124,11 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
 
     // await axios.delete(`http://localhost:8080/api/v1/books/${id}`, config)
 
-    await axios.delete(`http://localhost:8080/api/v1/books/${id}`)
-    
+    const { id, bookId } = ids
 
+    await axios.delete(`http://localhost:8080/api/v1/books/${bookId}`)
+    await axios.delete(`http://localhost:8080/api/v1/inventories/${id}`)
+    
     dispatch({
       type: PRODUCT_DELETE_SUCCESS,
     })
@@ -183,16 +182,17 @@ export const createProduct = () => async (dispatch, getState) => {
 
     const newInventory = {
       book: data,
-      "countInStock": 0,
+      "purchasePrice": 0,
       "quantity": 0,
+      "lastAcquired": new Date(),
+      "lastUpdated": new Date(),
     }
 
     const result = await axios.post(`http://localhost:8080/api/v1/inventories`, newInventory)
-    console.log("INVENTORY IN CREATE BOOK", result)
 
     dispatch({
       type: PRODUCT_CREATE_SUCCESS,
-      payload: data,
+      payload: result.data,
     })
   } catch (error) {
     const message =
@@ -232,29 +232,29 @@ export const updateProduct = (product) => async (dispatch, getState) => {
     //   config
     // )
 
-    //TODO: update inventory
-    
-    const inventoryUpdate = {
-      "quantity": product.countInStock,
-      "purchasePrice": 0
-    }
-
     //get genres
     let genresInDB = await axios.get(
       `http://localhost:8080/api/v1/genres`,
     )
 
     genresInDB = genresInDB.data
+
+    console.log("GENRES", product.book.genres)
     
     let newGenre = []
     let updatedGenresOfBook = []
 
+    
+    if (product.book.genres.length === 1 && product.book.genres[0] === "") {
+      product.book.genres = [];
+    }
+
     //get genres of product
-    product.genres.forEach(async (genreName) => {
+    product.book.genres.forEach(async (genreName) => {
       let matchingGenre = genresInDB.find((genre) => genre.name.toLowerCase() === genreName.toLowerCase());
       if (!matchingGenre) {
         // Genre doesn't exist in the database, add it
-        newGenre = { name: genreName };
+        newGenre = { name: genreName.toLowerCase() };
         
         let { data } = await axios.post(
           `http://localhost:8080/api/v1/genres`,
@@ -277,10 +277,15 @@ export const updateProduct = (product) => async (dispatch, getState) => {
 
     const { data } = await axios.post(
       `http://localhost:8080/api/v1/books`,
+      product.book
+    )
+    product.lastUpdated = new Date();
+    product.lastAcquired = product.lastUpdated;
+
+    let result = await axios.post(
+      `http://localhost:8080/api/v1/inventories`,
       product
     )
-
-    
 
     dispatch({
       type: PRODUCT_UPDATE_SUCCESS,

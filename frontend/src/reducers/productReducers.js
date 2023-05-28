@@ -28,9 +28,9 @@ export const productListReducer = (state = { products: [] }, action) => {
     case PRODUCT_LIST_SUCCESS:
       return {
         loading: false,
-        products: action.payload.content,
+        products: action.payload,
         pages: action.payload.totalPages,
-        page: action.payload.pageable.pageNumber + 1,
+        page: action.payload.pageable ? action.payload.pageable.pageNumber + 1 : 1,
       }
     case PRODUCT_LIST_FAIL:
       return { loading: false, error: action.payload }
@@ -39,13 +39,10 @@ export const productListReducer = (state = { products: [] }, action) => {
   }
 }
 
-export const productDetailsReducer = (
-  state = { product: { reviews: [] } },
-  action
-) => {
+export const productDetailsReducer = ( state = { product: [] }, action) => {
   switch (action.type) {
     case PRODUCT_DETAILS_REQUEST:
-      return { ...state, loading: true }
+      return { ...state, loading: true, product: [] }
     case PRODUCT_DETAILS_SUCCESS:
       return { loading: false, product: action.payload }
     case PRODUCT_DETAILS_FAIL:

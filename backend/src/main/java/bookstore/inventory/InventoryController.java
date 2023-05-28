@@ -20,10 +20,17 @@ public class InventoryController {
         return new ResponseEntity<>(inventoryService.findAll(), HttpStatus.OK);
     }
 
+
     @PostMapping
     public ResponseEntity<Inventory> addInventory(@RequestBody Inventory inventory) {
         Inventory savedInventory = inventoryService.addItem(inventory);
         return new ResponseEntity<>(savedInventory, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Inventory> findInventoryById(@PathVariable Long id) {
+        Inventory inventory = inventoryService.findById(id);
+        return new ResponseEntity<>(inventory, HttpStatus.OK);
     }
 
     @PostMapping("/{id}/restock")

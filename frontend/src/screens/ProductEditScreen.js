@@ -16,18 +16,18 @@ const ProductEditScreen = ({ match, history }) => {
   const [authorName, setAuthorName] = useState('')
   const [publisher, setPublisher] = useState('')
   const [publicationYear, setPublicationYear] = useState('')
-  const [countInStock, setCountInStock] = useState(0)
   const [isbn, setIsbn] = useState('0000000000000')
   const [pageNumber, setPageNumber] = useState(0)
   const [price, setPrice] = useState(0)
-  const [genres, setGenres] = useState([''])
+  const [purchasePrice, setPurchasePrice] = useState(0)
+  const [quantity, setQuantity] = useState(0)
+  const [genres, setGenres] = useState([])
   const [tempGenre, setTempGenre] = useState(''); // New state variable to store the temporary genre value
   const [uploading, setUploading] = useState(false)
 
   const dispatch = useDispatch()
 
   const productDetails = useSelector((state) => state.productDetails)
-
   const { loading, error, product } = productDetails
 
   const productUpdate = useSelector((state) => state.productUpdate)
@@ -42,49 +42,26 @@ const ProductEditScreen = ({ match, history }) => {
       dispatch({ type: PRODUCT_UPDATE_RESET })
       history.push('/admin/productlist')
     } else {
-      if (!product.title || product.id !== productId) {
-        console.log("GENRES in if", product.genres)
-        console.log("product.id", product.id)
-        console.log("productId", productId)
-        dispatch(listProductDetails(productId))
 
+      if (product.id !== productId) {
+        console.log("PRODUCTID", productId)
+        console.log("PRODUCT.id", product.id)
+        dispatch(listProductDetails(productId))
       } else {
-        setTitle(product.title)
-        setAuthorName(product.authorName)
-        setPublisher(product.publisher)
-        setPublicationYear(product.publicationYear)
-        setCountInStock(product.countInStock)
-        setIsbn(product.isbn)
-        setPageNumber(product.pageNumber)
-        setPrice(product.price)
-        setGenres(product.genres)
-        console.log("GENRES in else", product.genres)
+        setTitle(product.book.title)
+        setAuthorName(product.book.authorName)
+        setPublisher(product.book.publisher)
+        setPublicationYear(product.book.publicationYear)
+        setIsbn(product.book.isbn)
+        setPageNumber(product.book.pageNumber)
+        setPrice(product.book.price)
+        setGenres(product.book.genres)
+        setPurchasePrice(product.book.purchasePrice)
+        setQuantity(product.book.quantity)
+        console.log("GENRES in else", product.book.genres)
       }
     }
   }, [dispatch, history, productId, successUpdate])
-
-  // const uploadFileHandler = async (e) => {
-  //   const file = e.target.files[0]
-  //   const formData = new FormData()
-  //   formData.append('image', file)
-  //   setUploading(true)
-
-  //   try {
-  //     const config = {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       },
-  //     }
-
-  //     const { data } = await axios.post('/api/upload', formData, config)
-
-  //     // setImage(data)
-  //     setUploading(false)
-  //   } catch (error) {
-  //     console.error(error)
-  //     setUploading(false)
-  //   }
-  // }
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -95,15 +72,19 @@ const ProductEditScreen = ({ match, history }) => {
     dispatch(
       updateProduct({
         id: productId,
-        title,
-        authorName,
-        publisher,
-        publicationYear,
-        isbn,
-        pageNumber,
-        price,
-        genres: updatedGenres,
-        countInStock,
+        book:{
+          id: product.book.id,
+          title,
+          authorName,
+          publisher,
+          publicationYear,
+          isbn,
+          pageNumber,
+          price,
+          genres: updatedGenres,
+        },
+        quantity,
+        purchasePrice,
       })
     )
     setTempGenre(''); // Clear the tempGenre state
@@ -112,7 +93,7 @@ const ProductEditScreen = ({ match, history }) => {
   return (
     <>
       <Link to='/admin/productlist' className='btn btn-light my-3'>
-        Go Back
+        Go Back 
       </Link>
       <FormContainer>
         <h1>Edit Product</h1>
@@ -154,16 +135,6 @@ const ProductEditScreen = ({ match, history }) => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId='countInStock'>
-              <Form.Label>Count In Stock</Form.Label>
-              <Form.Control
-                type='number'
-                placeholder='Enter countInStock'
-                value={countInStock}
-                onChange={(e) => setCountInStock(parseInt(e.target.value, 10))}
-              ></Form.Control>
-            </Form.Group>
-
             <Form.Group controlId='publicationYear'>
               <Form.Label>Year</Form.Label>
               <Form.Control
@@ -201,6 +172,26 @@ const ProductEditScreen = ({ match, history }) => {
                 placeholder='Enter price'
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='purchasePrice'>
+              <Form.Label>Purchase Price</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='Enter purchase price'
+                value={purchasePrice}
+                onChange={(e) => setPurchasePrice(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='quantity'>
+              <Form.Label>Quantity</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='Enter quantity'
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
