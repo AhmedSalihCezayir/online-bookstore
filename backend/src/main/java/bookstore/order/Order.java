@@ -28,7 +28,7 @@ public class Order {
     @JoinColumn(name = "customerId", nullable = false)
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "couponId")
     private Coupon coupon;
 
