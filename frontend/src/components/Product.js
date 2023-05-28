@@ -1,10 +1,11 @@
 import axios from 'axios'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { Card, Button, Row, Col, ListGroup, Form } from 'react-bootstrap'
 
-const Product = ({ history, product}) => {
+const Product = ({ product}) => {
   const [qty, setQty] = React.useState(1)
+  const history = useHistory();
 
   const addToCartHandler = () => {
     history.push(`/cart/${product.id}?qty=${qty}`)
