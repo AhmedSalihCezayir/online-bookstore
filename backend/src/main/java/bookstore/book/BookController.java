@@ -24,15 +24,11 @@ public class BookController {
             @RequestParam(required = false) String publisher,
             @RequestParam(required = false) String publicationYear,
             @RequestParam(required = false) Long genreId,
-            @RequestParam(required = false) OrderBy orderBy,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "1") int size
     ) {
-        String convertedOrderBy = null;
-        if (orderBy != null)
-            convertedOrderBy = orderBy.toString();
         Pageable pageable = PageRequest.of(page, size);
-        Page<Book> bookPage = bookService.findBooksByCriteria(title, author, publisher, publicationYear, convertedOrderBy, genreId, pageable);
+        Page<Book> bookPage = bookService.findBooksByCriteria(title, author, publisher, publicationYear, genreId, pageable);
         return new ResponseEntity<>(bookPage, HttpStatus.OK);
     }
 
