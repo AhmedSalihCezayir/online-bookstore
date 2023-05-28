@@ -21,33 +21,57 @@ import {
 } from '../constants/productConstants'
 import { logout } from './userActions'
 
-export const listProducts = (keyword = '', pageNumber = 1, ifBook = true) => async (
+export const listProducts = (keyword = '', pageNumber = 1, ifBook = true, filters = null) => async (
   dispatch
 ) => {
   try {
     dispatch({ type: PRODUCT_LIST_REQUEST })
 
-    // const { data } = await axios.get(
-    //   `/api/products?keyword=${keyword}`
-    // )
-
     let info = {}
+    let url = "http://localhost:8080/api/v1/books"
+    
     if(ifBook){
-      const { data } = await axios.get(
-        `http://localhost:8080/api/v1/books?page=${pageNumber}&size=10`
-      )
+      if(filters && Object.keys(filters).length !== 0){  
+        if (filters.title && filters.title !== ""){
+          url += `?title=${filters.title}&`
+        }
+        if (filters.author && filters.author !== ""){
+          if (url.endsWith("&"))
+            url += `authorName=${filters.author}&`
+          else
+            url += `?authorName=${filters.author}&`
+        }
+        if (filters.publicationYear && filters.publicationYear !== ""){
+          if (url.endsWith("&"))
+            url += `publicationYear=${filters.publicationYear}&`
+          else
+            url += `?publicationYear=${filters.publicationYear}&`
+        }
+        if (filters.genre && filters.genre !== ""){
+          if (url.endsWith("&"))
+            url += `genre=${filters.genre}&`
+          else
+            url += `?genre=${filters.genre}&`
+        }
+        url += `page=${pageNumber}&size=10`
+      }
+      else{
+        url += `?page=${pageNumber}&size=10`
+      }
+      console.log(url)
+    
+      const { data } = await axios.get(url)
       info = data
-    } else {
+    } 
+    else {
       // Get every inventory
-      const { data } = await axios.get(
-        "http://localhost:8080/api/v1/inventories"
-      )
+      const { data } = await axios.get("http://localhost:8080/api/v1/inventories")
       info = data
     }
 
     dispatch({
       type: PRODUCT_LIST_SUCCESS,
-      payload: info,
+      payload: info.content,
     })
   } catch (error) {
     dispatch({
@@ -239,8 +263,6 @@ export const updateProduct = (product) => async (dispatch, getState) => {
     )
 
     genresInDB = genresInDB.data
-
-    console.log("GENRES", product.book.genres)
     
     let newGenre = []
     let updatedGenresOfBook = []
