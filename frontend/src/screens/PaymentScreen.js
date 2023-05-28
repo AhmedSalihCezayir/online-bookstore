@@ -7,9 +7,9 @@ import { savePaymentMethod } from '../actions/cartActions'
 
 const PaymentScreen = ({ history }) => {
   const cart = useSelector((state) => state.cart)
-  const { shippingAddress } = cart
+  const { shippingAddress, paymentAddress } = cart
 
-  if (!shippingAddress.address) {
+  if (!shippingAddress.streetAddress && !paymentAddress.streetAddress) {
     history.push('/shipping')
   }
 
