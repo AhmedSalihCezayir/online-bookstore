@@ -12,13 +12,13 @@ const Product = ({ history, product}) => {
 
   return (
     <Card className='my-3 p-3 rounded'>
-      <Card.Text as='h3'>{product.title}</Card.Text>
+      <Card.Text as='h3'>{product.book.title}</Card.Text>
       <Card.Body>
-        <Card.Text>Author: {product.authorName}</Card.Text>
-        <Card.Text>Page No: {product.pageNumber}</Card.Text>
-        <Card.Text>Genres: {product.genres.map(genre => genre.name).join(', ')}</Card.Text>
-        <Card.Text>Price: ${product.price}</Card.Text>
-        <Card.Text>Status: {product.quantity > 0 ? 'In Stock' : 'Out Of Stock'}</Card.Text>
+        <Card.Text>Author: {product.book.authorName}</Card.Text>
+        <Card.Text>Page No: {product.book.pageNumber}</Card.Text>
+        <Card.Text>Genres: {product.book.genres.map(genre => genre.name).join(', ')}</Card.Text> 
+        <Card.Text>Price: ${product.book.price}</Card.Text>
+        <Card.Text>Status: {product.book.quantity > 0 ? 'In Stock' : 'Out Of Stock'}</Card.Text>
         
         {/* {product.countInStock > 0 && ( */}
         <ListGroup variant='flush'>

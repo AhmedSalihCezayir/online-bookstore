@@ -21,7 +21,7 @@ const HomeScreen = ({ match }) => {
   const { loading, error, products, page, pages } = productList
 
   useEffect(() => {
-    dispatch(listProducts('', pageNumber))
+    dispatch(listProducts('', pageNumber, false))
   }, [dispatch, pageNumber])
 
   return (
