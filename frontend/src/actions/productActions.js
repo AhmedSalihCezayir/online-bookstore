@@ -313,8 +313,8 @@ export const listTopProducts = () => async (dispatch) => {
     dispatch({ type: PRODUCT_TOP_REQUEST })
 
     const { data } = await axios.get(`http://localhost:8080/api/v1/books`)
-
-    data.filter((product) => product.countVisited >= 0)
+    console.log("DATA", data)
+    data.content.filter((product) => product.countVisit >= 0)
 
     dispatch({
       type: PRODUCT_TOP_SUCCESS,
