@@ -7,19 +7,20 @@ import {
 } from '../constants/cartConstants'
 
 export const addToCart = (id, qty) => async (dispatch, getState) => {
-  const { data } = await axios.get(`/api/products/${id}`)
+	const { data } = await axios.get(`http://localhost:8080/api/v1/inventories/${id}`);
 
-  dispatch({
-    type: CART_ADD_ITEM,
-    payload: {
-      product: data.id,
-      name: data.name,
-      image: data.image,
-      price: data.price,
-      countInStock: data.countInStock,
-      qty,
-    },
-  })
+	dispatch({
+		type: CART_ADD_ITEM,
+		payload: {
+			product: data.id, // inventory id
+			name: data.book.title,
+			authorName: data.book.authorName,
+			// image: data.image,
+			price: data.book.price,
+			countInStock: data.quantity,
+			qty,
+		},
+	});
 
   localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
 }
@@ -39,7 +40,8 @@ export const saveShippingAddress = (data) => (dispatch) => {
     payload: data,
   })
 
-  localStorage.setItem('shippingAddress', JSON.stringify(data))
+  localStorage.setItem('shippingAddress', JSON.stringify(data.shippingAddress))
+  localStorage.setItem('paymentAddress', JSON.stringify(data.paymentAddress))
 }
 
 export const savePaymentMethod = (data) => (dispatch) => {

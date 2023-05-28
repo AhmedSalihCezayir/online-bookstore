@@ -1,82 +1,102 @@
-import React, { useState } from 'react'
-import { Form, Button } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import FormContainer from '../components/FormContainer'
-import CheckoutSteps from '../components/CheckoutSteps'
-import { saveShippingAddress } from '../actions/cartActions'
+import React, { useState, useEffect } from 'react';
+import { Button, Form, FormControl, Row, Col } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import FormContainer from '../components/FormContainer';
+import CheckoutSteps from '../components/CheckoutSteps';
+import { saveShippingAddress } from '../actions/cartActions';
+
+import axios from 'axios';
 
 const ShippingScreen = ({ history }) => {
-  const cart = useSelector((state) => state.cart)
-  const { shippingAddress } = cart
+	const cart = useSelector((state) => state.cart);
+	const { shippingAddress: shipping, paymentAddress: payment } = cart;
 
-  const [address, setAddress] = useState(shippingAddress.address)
-  const [city, setCity] = useState(shippingAddress.city)
-  const [postalCode, setPostalCode] = useState(shippingAddress.postalCode)
-  const [country, setCountry] = useState(shippingAddress.country)
+	const [userAddresses, setUserAddresses] = useState([]);
+	const [shippingAddress, setShippingAddress] = useState(shipping);
+	const [paymentAddress, setPaymentAddress] = useState(payment);
 
-  const dispatch = useDispatch()
+	const dispatch = useDispatch();
 
-  const submitHandler = (e) => {
-    e.preventDefault()
-    dispatch(saveShippingAddress({ address, city, postalCode, country }))
-    history.push('/payment')
-  }
+	const submitHandler = (e) => {
+		e.preventDefault();
+		dispatch(saveShippingAddress({ shippingAddress, paymentAddress }));
+		history.push('/payment');
+	};
 
-  return (
-    <FormContainer>
-      <CheckoutSteps step1 step2 />
-      <h1>Shipping</h1>
-      <Form onSubmit={submitHandler}>
-        <Form.Group controlId='address'>
-          <Form.Label>Address</Form.Label>
-          <Form.Control
-            type='text'
-            placeholder='Enter address'
-            value={address}
-            required
-            onChange={(e) => setAddress(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+	useEffect(() => {
+		const fetchAddresses = async () => {
+			// TODO This should be current user !!
+			const currentUserID = 1;
+			const { data } = await axios.get(`http://localhost:8080/api/v1/customers/${currentUserID}/addresses`);
+			setUserAddresses(data);
+		};
 
-        <Form.Group controlId='city'>
-          <Form.Label>City</Form.Label>
-          <Form.Control
-            type='text'
-            placeholder='Enter city'
-            value={city}
-            required
-            onChange={(e) => setCity(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+		fetchAddresses();
+	}, []);
 
-        <Form.Group controlId='postalCode'>
-          <Form.Label>Postal Code</Form.Label>
-          <Form.Control
-            type='text'
-            placeholder='Enter postal code'
-            value={postalCode}
-            required
-            onChange={(e) => setPostalCode(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+	const handleShipping = (event) => {
+		const selectedAddress = userAddresses.find((address) => address.streetAddress === event.target.value);
+		setShippingAddress(selectedAddress);
+	};
 
-        <Form.Group controlId='country'>
-          <Form.Label>Country</Form.Label>
-          <Form.Control
-            type='text'
-            placeholder='Enter country'
-            value={country}
-            required
-            onChange={(e) => setCountry(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+	const handlePayment = (event) => {
+		const selectedAddress = userAddresses.find((address) => address.streetAddress === event.target.value);
+		setPaymentAddress(selectedAddress);
+	};
 
-        <Button type='submit' variant='primary'>
-          Continue
-        </Button>
-      </Form>
-    </FormContainer>
-  )
-}
+	return (
+		<FormContainer>
+			<CheckoutSteps step1 step2 />
+			<h1>Shipping</h1>
+			{/* <Form.Check style={{ fontSize: "1.5em"}} type='checkbox' label={`default `} /> */}
+			<Form>
+				<Row>
+					<Form.Label className='ml-3'>Shipping Address</Form.Label>
+				</Row>
+				<Row>
+					<Col>
+						<Form.Group controlId='exampleForm.SelectCustom'>
+							<FormControl as='select' value={shippingAddress.streetAddress} onChange={handleShipping}>
+								{userAddresses.map((address) => {
+									return <option key={address.id}>{address.streetAddress}</option>;
+								})}
+							</FormControl>
+						</Form.Group>
+					</Col>
+				</Row>
+			</Form>
 
-export default ShippingScreen
+			<Form>
+				<Row>
+					<Form.Label className='ml-3'>Payment Address</Form.Label>
+				</Row>
+				<Row>
+					<Col>
+						<Form.Group controlId='exampleForm.SelectCustom'>
+							<FormControl as='select' value={paymentAddress.streetAddress} onChange={handlePayment}>
+								{userAddresses.map((address) => {
+									return <option key={address.id}>{address.streetAddress}</option>;
+								})}
+							</FormControl>
+						</Form.Group>
+					</Col>
+				</Row>
+			</Form>
+
+			<Row>
+				<Col className='d-flex justify-content-center'>
+					<Button className='w-100' onClick={() => history.push('/new_address')}>
+						Add new Address
+					</Button>
+				</Col>
+				<Col className='d-flex justify-content-center'>
+					<Button className='w-100' variant='primary' onClick={submitHandler}>
+						Continue
+					</Button>
+				</Col>
+			</Row>
+		</FormContainer>
+	);
+};
+
+export default ShippingScreen;

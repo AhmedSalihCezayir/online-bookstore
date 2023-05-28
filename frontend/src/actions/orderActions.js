@@ -35,11 +35,29 @@ export const createOrder = (order) => async (dispatch, getState) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
+        // Authorization: `Bearer ${userInfo.token}`,
       },
     }
+    
+    const books = order.orderItems.map((book) => {
+      return {
+        bookId: book.product,
+        quantity: book.qty
+      }
+    })
 
-    const { data } = await axios.post(`/api/orders`, order, config)
+    const orderInfo = {
+      couponCode: order.coupon,
+      paymentAddressId: order.paymentAddress.id,
+      shippingAddressId: order.shippingAddress.id,
+      books 
+    }
+
+    console.log("orderInfo: ", orderInfo)
+
+    // TODO This should be current user !!
+    const currentUserID = 1;
+    const { data } = await axios.post(`http://localhost:8080/api/v1/customers/${currentUserID}/orders`, orderInfo)
 
     dispatch({
       type: ORDER_CREATE_SUCCESS,
@@ -50,18 +68,21 @@ export const createOrder = (order) => async (dispatch, getState) => {
       payload: data,
     })
     localStorage.removeItem('cartItems')
+    localStorage.removeItem('shippingAddress')
+    localStorage.removeItem('paymentAddress')
   } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    if (message === 'Not authorized, token failed') {
-      dispatch(logout())
-    }
-    dispatch({
-      type: ORDER_CREATE_FAIL,
-      payload: message,
-    })
+    console.log(error.response)
+    // const message =
+    //   error.response && error.response.data.message
+    //     ? error.response.data.message
+    //     : error.message
+    // if (message === 'Not authorized, token failed') {
+    //   dispatch(logout())
+    // }
+    // dispatch({
+    //   type: ORDER_CREATE_FAIL,
+    //   payload: message,
+    // })
   }
 }
 
