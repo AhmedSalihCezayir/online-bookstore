@@ -9,6 +9,7 @@ import { register } from '../actions/userActions'
 
 const RegisterScreen = ({ location, history }) => {
   const [name, setName] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -32,9 +33,26 @@ const RegisterScreen = ({ location, history }) => {
     if (password !== confirmPassword) {
       setMessage('Passwords do not match')
     } else {
-      dispatch(register(name, email, password))
+      dispatch(register(name, phoneNumber, email, password))
     }
   }
+
+  const handlePhoneNumberChange = (e) => {
+    let input = e.target.value.replace(/\D/g,''); // Remove all non-numeric characters
+    let output = "";
+
+    if(input.length <= 3) {
+      output = "(" + input;
+    } else if(input.length <= 6) {
+      output = "(" + input.substring(0, 3) + ") " + input.substring(3);
+    } else if(input.length <= 10) {
+      output = "(" + input.substring(0, 3) + ") " + input.substring(3, 6) + "-" + input.substring(6);
+    } else {
+      output = "(" + input.substring(0, 3) + ") " + input.substring(3, 6) + "-" + input.substring(6, 10);
+    }
+
+    setPhoneNumber(output);
+  };
 
   return (
     <FormContainer>
@@ -50,6 +68,16 @@ const RegisterScreen = ({ location, history }) => {
             placeholder='Enter name'
             value={name}
             onChange={(e) => setName(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+
+        <Form.Group controlId='number'>
+          <Form.Label>Phone Number</Form.Label>
+          <Form.Control
+            // type='number'
+            placeholder='Enter phone number'
+            value={phoneNumber}
+            onChange={handlePhoneNumberChange}
           ></Form.Control>
         </Form.Group>
 

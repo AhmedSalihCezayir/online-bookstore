@@ -27,92 +27,96 @@ import {
 } from '../constants/userConstants'
 import { ORDER_LIST_MY_RESET } from '../constants/orderConstants'
 
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+} from 'firebase/auth';
+
+import auth from '../firebase_config'
+
 export const login = (email, password) => async (dispatch) => {
-  try {
-    dispatch({
-      type: USER_LOGIN_REQUEST,
-    })
+	dispatch({
+		type: USER_LOGIN_REQUEST,
+	});
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
+	signInWithEmailAndPassword(auth, email, password)
+		.then((userCredential) => {
+			// const user = userCredential.user;
+			dispatch({
+				type: USER_LOGIN_SUCCESS,
+				payload: null, // TODO Fetch the user from our sql db and save it
+			});
 
-    const { data } = await axios.post(
-      '/api/users/login',
-      { email, password },
-      config
-    )
-
-    dispatch({
-      type: USER_LOGIN_SUCCESS,
-      payload: data,
-    })
-
-    localStorage.setItem('userInfo', JSON.stringify(data))
-  } catch (error) {
-    dispatch({
-      type: USER_LOGIN_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    })
-  }
-}
+      // TODO Fetch the user from our sql db and save it
+			localStorage.setItem('userInfo', JSON.stringify(null));
+		})
+		.catch((error) => {
+			dispatch({
+				type: USER_LOGIN_FAIL,
+				payload: error.response && error.response.data.message ? error.response.data.message : error.message,
+			});
+		});
+};
 
 export const logout = () => (dispatch) => {
-  localStorage.removeItem('userInfo')
-  localStorage.removeItem('cartItems')
-  localStorage.removeItem('shippingAddress')
-  localStorage.removeItem('paymentMethod')
-  dispatch({ type: USER_LOGOUT })
-  dispatch({ type: USER_DETAILS_RESET })
-  dispatch({ type: ORDER_LIST_MY_RESET })
-  dispatch({ type: USER_LIST_RESET })
-  document.location.href = '/login'
+  signOut(auth).then(() => {
+    // Sign-out successful.
+    localStorage.removeItem('userInfo')
+    localStorage.removeItem('cartItems')
+    localStorage.removeItem('shippingAddress')
+    localStorage.removeItem('paymentAddress')
+    localStorage.removeItem('paymentMethod')
+    dispatch({ type: USER_LOGOUT })
+    dispatch({ type: USER_DETAILS_RESET })
+    dispatch({ type: ORDER_LIST_MY_RESET })
+    dispatch({ type: USER_LIST_RESET })
+    document.location.href = '/login'
+  }).catch((error) => {
+    // An error happened.
+    console.log(error.respone)
+  });
 }
 
-export const register = (name, email, password) => async (dispatch) => {
-  try {
-    dispatch({
-      type: USER_REGISTER_REQUEST,
-    })
+export const register = (name, phoneNumber, email, password) => async (dispatch) => {
+	dispatch({
+		type: USER_REGISTER_REQUEST,
+	});
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
+	createUserWithEmailAndPassword(auth, email, password)
+		.then(async (userCredential) => {
+			// Signed in user
+			const user = userCredential.user;
+			
+      dispatch({
+				type: USER_REGISTER_SUCCESS,
+				payload: user,
+			});
 
-    const { data } = await axios.post(
-      '/api/users',
-      { name, email, password },
-      config
-    )
+			dispatch({
+				type: USER_LOGIN_SUCCESS,
+				payload: user,
+			});
 
-    dispatch({
-      type: USER_REGISTER_SUCCESS,
-      payload: data,
-    })
-
-    dispatch({
-      type: USER_LOGIN_SUCCESS,
-      payload: data,
-    })
-
-    localStorage.setItem('userInfo', JSON.stringify(data))
-  } catch (error) {
-    dispatch({
-      type: USER_REGISTER_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    })
-  }
-}
+      try {
+        const { data } = await axios.post(`http://localhost:8080/api/v1/customers`, {
+          name,
+          email,
+          password,
+          phoneNumber,
+        });
+        localStorage.setItem('userInfo', JSON.stringify(data));
+      } catch (e) {
+        console.log(e.respone)
+      }
+		})
+		.catch((error) => {
+			dispatch({
+				type: USER_REGISTER_FAIL,
+				payload: error.response && error.response.data.message ? error.response.data.message : error.message,
+			});
+		});
+};
 
 export const getUserDetails = (id) => async (dispatch) => {
   try {
