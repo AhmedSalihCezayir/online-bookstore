@@ -49,7 +49,7 @@ const PlaceOrderScreen = ({ history }) => {
 			createOrder({
 				orderItems: cart.cartItems,
 				shippingAddress: cart.shippingAddress,
-        paymentAddress: cart.paymentAddress,
+				paymentAddress: cart.paymentAddress,
 				paymentMethod: cart.paymentMethod,
 				itemsPrice: cart.itemsPrice,
 				totalPrice: cart.totalPrice,
@@ -61,7 +61,7 @@ const PlaceOrderScreen = ({ history }) => {
 
 	const validateCoupon = async () => {
 		try {
-			const { data } = await axios.get(`http://localhost:8080/api/v1/coupons?code=${coupon}`);
+			const { data } = await axios.post(`http://localhost:8080/api/v1/coupons`, { couponCode: coupon });
 			setDiscount(data.discountAmount);
 			setCouponError(false);
 		} catch (error) {
