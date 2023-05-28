@@ -124,10 +124,11 @@ export const deleteProduct = (ids) => async (dispatch, getState) => {
 
     // await axios.delete(`http://localhost:8080/api/v1/books/${id}`, config)
 
-    const { id, bookId } = ids
+    const { inventoryId, bookId } = ids
 
-    await axios.delete(`http://localhost:8080/api/v1/books/${bookId}`)
-    await axios.delete(`http://localhost:8080/api/v1/inventories/${id}`)
+    await axios.delete(`http://localhost:8080/api/v1/inventories/${inventoryId}`)
+
+    
     
     dispatch({
       type: PRODUCT_DELETE_SUCCESS,

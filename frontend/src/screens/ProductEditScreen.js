@@ -38,15 +38,13 @@ const ProductEditScreen = ({ match, history }) => {
   } = productUpdate
 
   useEffect(() => {
+
     if (successUpdate) {
       dispatch({ type: PRODUCT_UPDATE_RESET })
       history.push('/admin/productlist')
     } else {
-
-      if (product.id !== productId) {
-        console.log("PRODUCTID", productId)
-        console.log("PRODUCT.id", product.id)
-        dispatch(listProductDetails(productId))
+      if (!product.id || product.id !== productId) {
+        dispatch(listProductDetails(productId))        
       } else {
         setTitle(product.book.title)
         setAuthorName(product.book.authorName)
@@ -58,7 +56,6 @@ const ProductEditScreen = ({ match, history }) => {
         setGenres(product.book.genres)
         setPurchasePrice(product.book.purchasePrice)
         setQuantity(product.book.quantity)
-        console.log("GENRES in else", product.book.genres)
       }
     }
   }, [dispatch, history, productId, successUpdate])

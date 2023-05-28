@@ -112,6 +112,7 @@ const ProductListScreen = ({ history, match }) => {
                 <th>PRICE</th>
                 <th>GENRE</th>
                 <th>QTY</th>
+                <th>INVENTORY ID</th>
                 <th></th>
               </tr>
             </thead>
@@ -128,6 +129,7 @@ const ProductListScreen = ({ history, match }) => {
                   <td>${product.book.price}</td>
                   <td>{product.book.genres.map(genre => genre.name).join(', ')}</td>
                   <td>{product.quantity}</td>
+                  <td>{product.id}</td>
                   <td>
                     <LinkContainer to={`/admin/product/${product.id}/edit`}>
                       <Button variant='light' className='btn-sm'>
