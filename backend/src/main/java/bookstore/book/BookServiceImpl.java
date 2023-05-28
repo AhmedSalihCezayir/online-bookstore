@@ -17,9 +17,13 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public Page<Book> findBooksByCriteria(
-            String title, String author, String publisher, String publicationYear, String orderBy, Long genreId, Pageable pageable
+            String title, String author, String publisher, String publicationYear, Long genreId, Pageable pageable
     ) {
-        return bookRepository.findBooksByCriteria(title, author, publisher, publicationYear, orderBy, genreId, pageable);
+        Page<Book> results = bookRepository.findBooksByCriteria(title, author, publisher, publicationYear, genreId, pageable);
+        for (Book book : results) {
+            book.setQuantity(book.getInventory().getQuantity());
+        }
+        return results;
     }
 
 
@@ -32,6 +36,7 @@ public class BookServiceImpl implements BookService{
         Book book = optionalBook.get();
         book.setCountVisit(book.getCountVisit() + 1);
         bookRepository.save(book);
+        book.setQuantity(book.getInventory().getQuantity());
         return book;
     }
 

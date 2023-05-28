@@ -46,6 +46,9 @@ public class Book {
     @Column()
     private Long countVisit;
 
+    @Transient
+    private Integer quantity;
+
     @ManyToMany
     @JoinTable(
             name = "book_genre",
