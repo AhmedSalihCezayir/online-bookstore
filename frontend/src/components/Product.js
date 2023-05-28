@@ -1,18 +1,19 @@
 import axios from 'axios'
 import React, { useEffect, useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { Card, Button, Row, Col, ListGroup, Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 // import AuthContext from './AuthContext';
 
-const Product = ({ history, product}) => {
+const Product = ({ product}) => {
   const [qty, setQty] = React.useState(1)
   const [wished, setWished] = React.useState(false)
   // const currentUser = useContext(AuthContext);
   let currentUser = {
     id: 2,
   }
+  const history = useHistory();
 
   const addToCartHandler = () => {
     history.push(`/cart/${product.id}?qty=${qty}`)
