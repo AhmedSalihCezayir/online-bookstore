@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface BookService {
 
-    Page<Book> findBooksByCriteria(String title, String author, String publisher, String publicationYear, String orderBy, Long genreId, Pageable pageable);
+    Page<Book> findBooksByCriteria(String title, String author, String publisher, String publicationYear, Long genreId, Pageable pageable);
 
     Book findById(Long id);
 
