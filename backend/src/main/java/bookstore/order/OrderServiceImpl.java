@@ -61,7 +61,7 @@ public class OrderServiceImpl implements OrderService{
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
         Coupon coupon;
-        if (orderRequest.getCouponCode().equals("")) {
+        if (!orderRequest.getCouponCode().equals("")) {
             coupon = couponRepository.findByCouponCode(orderRequest.getCouponCode())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coupon not found"));
         }
