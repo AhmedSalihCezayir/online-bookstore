@@ -21,7 +21,7 @@ import {
 } from '../constants/productConstants'
 import { logout } from './userActions'
 
-export const listProducts = (keyword = '', pageNumber = 1, ifBook = true, filters = null) => async (
+export const listProducts = (keyword = '', pageNumber = 1, ifBook = true, filters = null, option = null) => async (
   dispatch
 ) => {
   try {
@@ -61,17 +61,26 @@ export const listProducts = (keyword = '', pageNumber = 1, ifBook = true, filter
       console.log(url)
     
       const { data } = await axios.get(url)
-      info = data
-    } 
+      info = data.content
+
+      if(option === 0){
+        info = info.slice(0,20).sort((a, b) => (a.countVisit < b.countVisit ? 1 : -1))
+      }
+
+      if(option === 1){
+        info = info.slice(0, 20).sort((a, b) => (a.id < b.id ? 1 : -1))
+      }
+    }
     else {
       // Get every inventory
       const { data } = await axios.get("http://localhost:8080/api/v1/inventories")
       info = data
+      console.log("DATA IN LIST PRODUCT", info)
     }
 
     dispatch({
       type: PRODUCT_LIST_SUCCESS,
-      payload: info.content,
+      payload: info,
     })
   } catch (error) {
     dispatch({
@@ -152,8 +161,6 @@ export const deleteProduct = (ids) => async (dispatch, getState) => {
 
     await axios.delete(`http://localhost:8080/api/v1/inventories/${inventoryId}`)
 
-    
-    
     dispatch({
       type: PRODUCT_DELETE_SUCCESS,
     })
@@ -296,12 +303,13 @@ export const updateProduct = (product) => async (dispatch, getState) => {
       updatedGenresOfBook.push(matchingGenre);
     });
     
-    product.genres = updatedGenresOfBook;
+    product.book.genres = updatedGenresOfBook;
 
     const { data } = await axios.post(
       `http://localhost:8080/api/v1/books`,
       product.book
     )
+
     product.lastUpdated = new Date();
     product.lastAcquired = product.lastUpdated;
 
@@ -334,13 +342,15 @@ export const listTopProducts = () => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_TOP_REQUEST })
 
-    const { data } = await axios.get(`http://localhost:8080/api/v1/books`)
-    console.log("DATA", data)
-    data.content.filter((product) => product.countVisit >= 0)
+    const { data } = await axios.get(`http://localhost:8080/api/v1/books?page=0&size=10`)
+    let popularBooks = data.content.filter((product) => product.countVisit >= 0)
+    
+    popularBooks = popularBooks.sort((a, b) => (a.countVisit < b.countVisit ? 1 : -1))
+    
 
     dispatch({
       type: PRODUCT_TOP_SUCCESS,
-      payload: data,
+      payload: popularBooks,
     })
   } catch (error) {
     dispatch({

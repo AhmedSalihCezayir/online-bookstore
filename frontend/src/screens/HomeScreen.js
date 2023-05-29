@@ -7,7 +7,6 @@ import Product from '../components/Product';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Paginate from '../components/Paginate';
-import Meta from '../components/Meta';
 import { listProducts } from '../actions/productActions';
 
 const HomeScreen = ({ match }) => {
@@ -20,6 +19,7 @@ const HomeScreen = ({ match }) => {
   const [genre, setGenre] = useState(1);
   const [genreChoices, setGenreChoices] = useState([]); // New state variable to store the genre options from the database
   const [filters, setFilters] = useState({});
+  const [selectedButton, setSelectedButton] = useState('popular'); // State variable to keep track of the selected button
 
   const productList = useSelector((state) => state.productList);
   const { loading, error, products, page, pages } = productList;
@@ -76,18 +76,52 @@ const HomeScreen = ({ match }) => {
     console.log(temp)
   };
 
+  const handleButtonClick = (button) => {
+    setSelectedButton(button);
+    let option = 0;
+    const tempFilters = {}
+    // Update the product listing based on the selected button
+    if (button === 'popular') {
+      dispatch(listProducts('', pageNumber, true, tempFilters, option));
+    } else if (button === 'new') {
+      option = 1
+      dispatch(listProducts('', pageNumber, true, tempFilters, option));
+      //sort products by id
+    } else if (button === 'filter') {
+      dispatch(listProducts('', pageNumber, true, filters));
+    }
+  };
+
   return (
     <>
-      <Meta />
-      {/* {!keyword ? (
-        <ProductCarousel />
-      ) : (
-        <Link to='/' className='btn btn-light'>
-          Go Back
-        </Link>
-      )} */}
-      <h1>Latest Products</h1>
-      <Form>
+      <Row className="d-flex justify-content-around">
+        <Button
+          variant={selectedButton === 'popular' ? 'primary' : 'secondary'}
+          onClick={() => handleButtonClick('popular')}
+        >
+          Popular Products
+        </Button>
+        <Button
+          variant={selectedButton === 'new' ? 'primary' : 'secondary'}
+          onClick={() => handleButtonClick('new')}
+        >
+          New Products
+        </Button>
+        <Button
+          variant={selectedButton === 'filter' ? 'primary' : 'secondary'}
+          onClick={() => handleButtonClick('filter')}
+        >
+          Filter Products
+        </Button>
+        <Button
+          variant={selectedButton === 'wishlisht' ? 'primary' : 'secondary'}
+          onClick={() => handleButtonClick('wishlisht')}
+        >
+          Wishlist
+        </Button>
+      </Row>
+      {(selectedButton === "filter") && (
+      <Form className="mt-5">
         <Row>
           <Col xs={12} md={6} lg={2}>
             <Form.Control
@@ -135,6 +169,7 @@ const HomeScreen = ({ match }) => {
           </Col>
         </Row>
       </Form>
+      )}
       {loading ? (
         <Loader />
       ) : error ? (
