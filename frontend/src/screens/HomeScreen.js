@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,10 +8,12 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Paginate from '../components/Paginate';
 import { listProducts } from '../actions/productActions';
+import AuthContext from './AuthContext';
 
 const HomeScreen = ({ match }) => {
   const pageNumber = match.params.pageNumber || 0;
   const dispatch = useDispatch();
+  const currentUser = useContext(AuthContext);
 
   const [author, setAuthor] = useState('');
   const [title, setTitle] = useState('');
@@ -25,7 +27,7 @@ const HomeScreen = ({ match }) => {
   const { loading, error, products, page, pages } = productList;
 
   useEffect(() => {
-    dispatch(listProducts('', pageNumber, true, filters));
+    dispatch(listProducts('', pageNumber, true, filters, null, currentUser.id));
   }, [dispatch, pageNumber, filters]);
 
   useEffect(() => {
@@ -78,17 +80,21 @@ const HomeScreen = ({ match }) => {
 
   const handleButtonClick = (button) => {
     setSelectedButton(button);
-    let option = 0;
+    let sortingType;
     const tempFilters = {}
     // Update the product listing based on the selected button
-    if (button === 'popular') {
-      dispatch(listProducts('', pageNumber, true, tempFilters, option));
-    } else if (button === 'new') {
-      option = 1
-      dispatch(listProducts('', pageNumber, true, tempFilters, option));
-      //sort products by id
-    } else if (button === 'filter') {
-      dispatch(listProducts('', pageNumber, true, filters));
+    if(button === 'filter'){
+      dispatch(listProducts(pageNumber, true, filters, null, currentUser.id));
+    } 
+    else {
+      if (button === 'popular') {
+        sortingType = 0;
+      } else if (button === 'new') {
+        sortingType = 1
+      } else if (button === 'wishlist'){
+        sortingType = 2
+      }
+      dispatch(listProducts(pageNumber, true, tempFilters, sortingType, currentUser.id));
     }
   };
 

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React from 'react'
+import React, { useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { Card, Button, Row, Col, ListGroup, Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,15 +7,31 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
 const Product = ({ history, product}) => {
   const [qty, setQty] = React.useState(1)
+  const [wished, setWished] = React.useState(false)
+  const currentUser = useContext(AuthContext);
 
   const addToCartHandler = () => {
     history.push(`/cart/${product.id}?qty=${qty}`)
   }
 
-  const addToWishListHandler = () => {
-    
+  const addToWishListHandler = async () => {
+    try { 
+      if(!wished) {
+        await axios.post(`http://localhost:8080/api/v1/customers/${currentUser.id}/favourites`, {"bookId": product.id})
+      } 
+      else {
+        await axios.delete(`http://localhost:8080/api/v1/customers/${currentUser.id}/favourites`, {"bookId": product.id})
+      } 
+    } catch (error) {
+      console.log('Error adding to wishlist:', error);
+    }
   }
 
+  useEffect(() => {
+    if (product.wished) {
+      setWished(true)
+    }
+  }, [product])
 
   return (
     <Card className='my-3 p-3 rounded'>

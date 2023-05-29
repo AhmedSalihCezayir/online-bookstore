@@ -21,7 +21,7 @@ import {
 } from '../constants/productConstants'
 import { logout } from './userActions'
 
-export const listProducts = (keyword = '', pageNumber = 1, ifBook = true, filters = null, option = null) => async (
+export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sortingType = null, customerId = null) => async (
   dispatch
 ) => {
   try {
@@ -61,15 +61,33 @@ export const listProducts = (keyword = '', pageNumber = 1, ifBook = true, filter
       console.log(url)
     
       const { data } = await axios.get(url)
+      
+      if(customerId){
+        const { data: wishList } = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/favourites`)
+        data.content.forEach((book) => {
+          if (wishList.some((wish) => wish.bookId === book.id)) {
+            book.wished = true;
+            book.wishAddedAt = wish.addedAt
+          } else {
+            book.wished = false;
+          }
+        })
+      }
+
       info = data.content
 
-      if(option === 0){
+      if(sortingType === 0){ //Sort by popularity
         info = info.slice(0,20).sort((a, b) => (a.countVisit < b.countVisit ? 1 : -1))
       }
 
-      if(option === 1){
+      if(sortingType === 1){ //Sort by new 
         info = info.slice(0, 20).sort((a, b) => (a.id < b.id ? 1 : -1))
       }
+
+      if(sortingType === 2){ //Sort by wishlist add time
+        info = info.slice(0, 20).sort((a, b) => (a.wishAddedAt < b.wishAddedAt ? 1 : -1))
+      }
+      
     }
     else {
       // Get every inventory
@@ -81,31 +99,6 @@ export const listProducts = (keyword = '', pageNumber = 1, ifBook = true, filter
     dispatch({
       type: PRODUCT_LIST_SUCCESS,
       payload: info,
-    })
-  } catch (error) {
-    dispatch({
-      type: PRODUCT_LIST_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    })
-  }
-}
-
-export const listProductsByVisited = (keyword = '', pageNumber = 1) => async (
-  dispatch
-) => {
-  try {
-    dispatch({ type: PRODUCT_LIST_REQUEST })
-
-    const { data } = await axios.get(
-      `http://localhost:8080/api/v1/books?orderBy=countVisit&page=${pageNumber}&size=10`
-    )
-    
-    dispatch({
-      type: PRODUCT_LIST_SUCCESS,
-      payload: data,
     })
   } catch (error) {
     dispatch({
