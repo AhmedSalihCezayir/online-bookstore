@@ -2,6 +2,8 @@ package bookstore.customer;
 
 import java.util.List;
 
+import bookstore.commons.CustomerDto;
+import bookstore.commons.MeRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,13 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerController {
 
     private final CustomerService customerService;
+
+    @GetMapping("/me")
+    public ResponseEntity<CustomerDto> me(@RequestBody MeRequest meRequest) {
+        CustomerDto customerDto = customerService.me(meRequest.getEmail());
+        return new ResponseEntity<>(customerDto, HttpStatus.OK);
+    }
+
 
     @GetMapping
     public ResponseEntity<List<Customer>> findAllCustomers() {

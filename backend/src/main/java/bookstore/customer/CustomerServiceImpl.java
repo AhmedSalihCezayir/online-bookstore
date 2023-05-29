@@ -4,6 +4,7 @@ package bookstore.customer;
 import java.util.List;
 import java.util.Optional;
 
+import bookstore.commons.CustomerDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,18 @@ public class CustomerServiceImpl implements CustomerService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found");
         }
         return optionalCustomer.get();
+    }
+
+    @Override
+    public CustomerDto me(String email) {
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
+        CustomerDto customerDto = new CustomerDto();
+        customerDto.setId(customer.getId());
+        customerDto.setName(customer.getName());
+        customerDto.setEmail(customer.getEmail());
+        customerDto.setPhoneNumber(customer.getPhoneNumber());
+        return customerDto;
     }
 
     @Override
