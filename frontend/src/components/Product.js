@@ -4,11 +4,15 @@ import { Link } from 'react-router-dom'
 import { Card, Button, Row, Col, ListGroup, Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
+// import AuthContext from './AuthContext';
 
 const Product = ({ history, product}) => {
   const [qty, setQty] = React.useState(1)
   const [wished, setWished] = React.useState(false)
-  const currentUser = useContext(AuthContext);
+  // const currentUser = useContext(AuthContext);
+  let currentUser = {
+    id: 2,
+  }
 
   const addToCartHandler = () => {
     history.push(`/cart/${product.id}?qty=${qty}`)
@@ -18,9 +22,11 @@ const Product = ({ history, product}) => {
     try { 
       if(!wished) {
         await axios.post(`http://localhost:8080/api/v1/customers/${currentUser.id}/favourites`, {"bookId": product.id})
+        setWished(true)
       } 
       else {
         await axios.delete(`http://localhost:8080/api/v1/customers/${currentUser.id}/favourites`, {"bookId": product.id})
+        setWished(false)
       } 
     } catch (error) {
       console.log('Error adding to wishlist:', error);
@@ -36,6 +42,7 @@ const Product = ({ history, product}) => {
   return (
     <Card className='my-3 p-3 rounded'>
       <Card.Text as='h3'>{product.title}</Card.Text>
+      <Card.Text as='h3'>{product.id}</Card.Text>
       <Card.Body>
         <Card.Text>Author: {product.authorName}</Card.Text>
         <Card.Text>Page No: {product.pageNumber}</Card.Text>
@@ -74,7 +81,7 @@ const Product = ({ history, product}) => {
                 Add To Cart
               </Button>
               <Button variant='link' className='text-danger' onClick={addToWishListHandler}>
-                <FontAwesomeIcon icon={faHeart} />
+                {wished ? <FontAwesomeIcon icon={faHeart} /> : <FontAwesomeIcon icon={faHeart} style={{color: 'grey'}} />}
               </Button>
             </Row>
         </ListGroup.Item>

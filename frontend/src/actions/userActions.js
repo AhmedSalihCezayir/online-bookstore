@@ -114,23 +114,12 @@ export const register = (name, email, password) => async (dispatch) => {
   }
 }
 
-export const getUserDetails = (id) => async (dispatch, getState) => {
+export const getUserDetails = (id) => async (dispatch) => {
   try {
     dispatch({
       type: USER_DETAILS_REQUEST,
     })
 
-    // const {
-    //   userLogin: { userInfo },
-    // } = getState()
-
-    // const config = {
-    //   headers: {
-    //     Authorization: `Bearer ${userInfo.token}`,
-    //   },
-    // }
-
-    // const { data } = await axios.get(`/api/customers/${id}`, config)
     const { data } = await axios.get(`http://localhost:8080/api/v1/customers/${id}`)
 
     dispatch({
@@ -152,24 +141,13 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
   }
 }
 
-export const updateUserProfile = (user) => async (dispatch, getState) => {
+export const updateUserProfile = (user) => async (dispatch) => {
   try {
     dispatch({
       type: USER_UPDATE_PROFILE_REQUEST,
     })
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
-
-    const { data } = await axios.put(`/api/users/profile`, user, config)
+    const { data } = await axios.post(`http://localhost:8080/api/v1/customers`, user)
 
     dispatch({
       type: USER_UPDATE_PROFILE_SUCCESS,

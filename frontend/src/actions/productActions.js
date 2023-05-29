@@ -64,14 +64,13 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
       
       if(customerId){
         const { data: wishList } = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/favourites`)
-        data.content.forEach((book) => {
-          if (wishList.some((wish) => wish.bookId === book.id)) {
-            book.wished = true;
-            book.wishAddedAt = wish.addedAt
-          } else {
-            book.wished = false;
-          }
-        })
+
+        const updatedBooks = data.content.map((book) => {
+          const matchingWishlistItem = wishList.find((wishlistItem) => wishlistItem.book.id === book.id);
+          return matchingWishlistItem ? { ...book, wishAddedAt: matchingWishlistItem.addedAt, wished: true} : {...book, wished: false};
+        });
+        
+        data.content = updatedBooks;
       }
 
       info = data.content

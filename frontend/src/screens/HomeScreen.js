@@ -8,12 +8,15 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Paginate from '../components/Paginate';
 import { listProducts } from '../actions/productActions';
-import AuthContext from './AuthContext';
+// import AuthContext from './AuthContext';
 
 const HomeScreen = ({ match }) => {
   const pageNumber = match.params.pageNumber || 0;
   const dispatch = useDispatch();
-  const currentUser = useContext(AuthContext);
+  // const currentUser = useContext(AuthContext);
+  let currentUser = {
+    id: 2,
+  }
 
   const [author, setAuthor] = useState('');
   const [title, setTitle] = useState('');
@@ -27,14 +30,13 @@ const HomeScreen = ({ match }) => {
   const { loading, error, products, page, pages } = productList;
 
   useEffect(() => {
-    dispatch(listProducts('', pageNumber, true, filters, null, currentUser.id));
+    dispatch(listProducts(pageNumber, true, filters, null, currentUser.id));
   }, [dispatch, pageNumber, filters]);
 
   useEffect(() => {
     // Fetch genre options from the database
     const fetchGenres = async () => {
       try {
-        // Replace the API call with your actual endpoint to fetch genres
         let genresInDB = await axios.get(
           `http://localhost:8080/api/v1/genres`,
         )
