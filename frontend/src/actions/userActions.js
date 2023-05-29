@@ -73,7 +73,7 @@ export const logout = () => (dispatch) => {
     dispatch({ type: USER_LIST_RESET })
     document.location.href = '/login'
   }).catch((error) => {
-    // An error happened.
+    // An error happened
     console.log(error.respone)
   });
 }

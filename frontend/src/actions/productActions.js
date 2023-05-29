@@ -58,7 +58,6 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
       else{
         url += `?page=${pageNumber}&size=10`
       }
-      console.log(url)
     
       const { data } = await axios.get(url)
       
@@ -71,6 +70,7 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
         });
         
         data.content = updatedBooks;
+        
       }
 
       info = data.content
@@ -84,15 +84,16 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
       }
 
       if(sortingType === 2){ //Sort by wishlist add time
+        info = info.filter((book) => book.wished)
         info = info.slice(0, 20).sort((a, b) => (a.wishAddedAt < b.wishAddedAt ? 1 : -1))
       }
       
+      console.log("INFO", info)
     }
     else {
       // Get every inventory
       const { data } = await axios.get("http://localhost:8080/api/v1/inventories")
       info = data
-      console.log("DATA IN LIST PRODUCT", info)
     }
 
     dispatch({
@@ -202,7 +203,6 @@ export const createProduct = () => async (dispatch, getState) => {
     }
 
     let { data } = await axios.post(`http://localhost:8080/api/v1/books`, newBook)
-    console.log("DATA IN CREATE BOOK", data)
 
     const newInventory = {
       book: data,

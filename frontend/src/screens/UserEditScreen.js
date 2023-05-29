@@ -28,9 +28,6 @@ const UserEditScreen = ({ match, history }) => {
   } = userUpdate
 
   useEffect(() => {
-    console.log("User id: ", userId)
-    console.log("user.id: ", user.id)
-    console.log("User.name: ", user.name)
     if (successUpdate) {
       dispatch({ type: USER_UPDATE_RESET })
       history.push('/admin/userlist')

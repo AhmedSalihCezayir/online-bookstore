@@ -26,11 +26,11 @@ const Product = ({ product}) => {
         setWished(true)
       } 
       else {
-        await axios.delete(`http://localhost:8080/api/v1/customers/${currentUser.id}/favourites`, {"bookId": product.id})
+        await axios.delete(`http://localhost:8080/api/v1/customers/${currentUser.id}/favourites/${product.id}`)
         setWished(false)
       } 
     } catch (error) {
-      console.log('Error adding to wishlist:', error);
+      console.log('Error changing the wishlist:', error);
     }
   }
 
@@ -49,7 +49,8 @@ const Product = ({ product}) => {
         <Card.Text>Page No: {product.pageNumber}</Card.Text>
         <Card.Text>Genres: {product.genres.map(genre => genre.name).join(', ')}</Card.Text> 
         <Card.Text>Price: ${product.price}</Card.Text>
-        {/* <Card.Text>Status: {product.quantity > 0 ? 'In Stock' : 'Out Of Stock'}</Card.Text> */}
+        {product.quantity > 0 && <Card.Text>Stock: {product.quantity}</Card.Text>}
+        {product.quantity <= 0 && <Card.Text>Stock: Out of Stock</Card.Text>}
         
         {/* {product.countInStock > 0 && ( */}
         <ListGroup variant='flush'>

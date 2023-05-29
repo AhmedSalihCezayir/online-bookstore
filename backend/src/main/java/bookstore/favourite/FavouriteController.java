@@ -27,9 +27,9 @@ public class FavouriteController {
         return new ResponseEntity<>(savedFavourite, HttpStatus.CREATED);
     }
 
-    @DeleteMapping()
-    public ResponseEntity<?> deleteFavourite(@PathVariable Long customerId, @RequestBody BookIdRequest bookIdRequest) {
-        favouriteService.delete(customerId, bookIdRequest.getBookId());
+    @DeleteMapping("/{bookId}")
+    public ResponseEntity<?> deleteFavourite(@PathVariable Long customerId, @PathVariable Long bookId) {
+        favouriteService.delete(customerId, bookId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

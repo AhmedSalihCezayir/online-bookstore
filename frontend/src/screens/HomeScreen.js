@@ -122,8 +122,8 @@ const HomeScreen = ({ match }) => {
           Filter Products
         </Button>
         <Button
-          variant={selectedButton === 'wishlisht' ? 'primary' : 'secondary'}
-          onClick={() => handleButtonClick('wishlisht')}
+          variant={selectedButton === 'wishlist' ? 'primary' : 'secondary'}
+          onClick={() => handleButtonClick('wishlist')}
         >
           Wishlist
         </Button>
