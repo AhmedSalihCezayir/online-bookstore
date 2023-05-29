@@ -42,9 +42,7 @@ const Product = ({ product}) => {
 
   return (
     <Card className='my-3 p-3 rounded'>
-      <Card.Text as='h3'>{product.title}</Card.Text>
-      <Card.Text as='h3'>{product.id}</Card.Text>
-      <Card.Body>
+      <Card.Text as='h4' style={{marginTop:5, marginBottom:5}}>{product.title}</Card.Text>
         <Card.Text>Author: {product.authorName}</Card.Text>
         <Card.Text>Page No: {product.pageNumber}</Card.Text>
         <Card.Text>Genres: {product.genres.map(genre => genre.name).join(', ')}</Card.Text> 
@@ -89,7 +87,6 @@ const Product = ({ product}) => {
         </ListGroup.Item>
       </ListGroup>
       {/* )} */}
-      </Card.Body>
     </Card>
   )
 }

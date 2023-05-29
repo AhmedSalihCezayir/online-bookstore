@@ -12,7 +12,11 @@ import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
 const ProfileScreen = ({ location, history }) => {
   // const currentUser = useContext(AuthContext);
   let currentUser = {
-    id: 2,
+    "id": 2,
+    "name": "sergen",
+    "email": "sergen@hotmail.com",
+    "password": "sergen123123",
+    "phoneNumber": "1234567890"
   }
 
   const [name, setName] = useState('')
@@ -41,8 +45,8 @@ const ProfileScreen = ({ location, history }) => {
     } else {
       if (!currentUser.id || success) {
         dispatch({ type: USER_UPDATE_PROFILE_RESET })
-        dispatch(getUserDetails('profile'))
-        dispatch(listMyOrders())
+        dispatch(getUserDetails(currentUser.id))
+        // dispatch(listMyOrders(currentUser.id))
       } else {
         setName(user.name)
         setEmail(user.email)
@@ -55,7 +59,8 @@ const ProfileScreen = ({ location, history }) => {
     if (password !== confirmPassword) {
       setMessage('Passwords do not match')
     } else {
-      dispatch(updateUserProfile({ id: user.id, name, email, password }))
+      console.log("id: ", currentUser.id, "name: ", name, "email: ", email, "password: ", password, "phoneNumber: ", currentUser.phoneNumber)
+      dispatch(updateUserProfile({ id: currentUser.id, name, email, password, phoneNumber: currentUser.phoneNumber }))
     }
   }
 
@@ -75,7 +80,7 @@ const ProfileScreen = ({ location, history }) => {
             <Form.Group controlId='name'>
               <Form.Label>Name</Form.Label>
               <Form.Control
-                type='name'
+                type='text'
                 placeholder='Enter name'
                 value={name}
                 onChange={(e) => setName(e.target.value)}

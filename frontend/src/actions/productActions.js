@@ -37,9 +37,9 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
         }
         if (filters.author && filters.author !== ""){
           if (url.endsWith("&"))
-            url += `authorName=${filters.author}&`
+            url += `author=${filters.author}&`
           else
-            url += `?authorName=${filters.author}&`
+            url += `?author=${filters.author}&`
         }
         if (filters.publicationYear && filters.publicationYear !== ""){
           if (url.endsWith("&"))
@@ -49,9 +49,9 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
         }
         if (filters.genre && filters.genre !== ""){
           if (url.endsWith("&"))
-            url += `genre=${filters.genre}&`
+            url += `genreId=${filters.genre}&`
           else
-            url += `?genre=${filters.genre}&`
+            url += `?genreId=${filters.genre}&`
         }
         url += `page=${pageNumber}&size=10`
       }
@@ -60,6 +60,7 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
       }
     
       const { data } = await axios.get(url)
+      console.log("URL", url)
       
       if(customerId){
         const { data: wishList } = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/favourites`)
@@ -68,7 +69,7 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
           const matchingWishlistItem = wishList.find((wishlistItem) => wishlistItem.book.id === book.id);
           return matchingWishlistItem ? { ...book, wishAddedAt: matchingWishlistItem.addedAt, wished: true} : {...book, wished: false};
         });
-        
+
         data.content = updatedBooks;
         
       }
@@ -87,8 +88,6 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
         info = info.filter((book) => book.wished)
         info = info.slice(0, 20).sort((a, b) => (a.wishAddedAt < b.wishAddedAt ? 1 : -1))
       }
-      
-      console.log("INFO", info)
     }
     else {
       // Get every inventory

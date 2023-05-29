@@ -183,7 +183,7 @@ const HomeScreen = ({ match }) => {
       ) : error ? (
         <Message variant='danger'>{error}</Message>
       ) : (
-        <Row>
+        <Row style={{marginTop: 20}}>
           {products && products.map((product) => (
             <Col key={product.id} xs={12} md={6} lg={4} xl={3}>
               <Product product={product} />

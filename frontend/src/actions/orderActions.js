@@ -209,12 +209,12 @@ export const deliverOrder = (order) => async (dispatch, getState) => {
   }
 }
 
-export const listMyOrders = () => async (dispatch, userID) => {
+export const listMyOrders = (userID) => async (dispatch) => {
   try {
     dispatch({
       type: ORDER_LIST_MY_REQUEST,
     })
-
+    console.log("userID: ", userID)
     const { data } = await axios.get(`http://localhost:8080/api/v1/customers/${userID}/orders`)
 
     dispatch({
