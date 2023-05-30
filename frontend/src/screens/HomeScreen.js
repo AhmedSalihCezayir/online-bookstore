@@ -49,13 +49,13 @@ const HomeScreen = ({ match }) => {
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     if (name === 'author') {
-      setAuthor(value);
+      setAuthor(value.trim());
     } else if (name === 'title') {
-      setTitle(value);
+      setTitle(value.trim());
     } else if (name === 'publicationYear') {
-      setPublicationYear(value);
+      setPublicationYear(value.trim());
     } else if (name === 'genre') {
-      setGenre(value);
+      setGenre(value.trim());
     }
   };
 
