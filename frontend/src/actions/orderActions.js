@@ -1,3 +1,4 @@
+import { useContext } from "react"
 import axios from 'axios'
 import { CART_CLEAR_ITEMS } from '../constants/cartConstants'
 import {
@@ -21,6 +22,7 @@ import {
   ORDER_DELIVER_REQUEST,
 } from '../constants/orderConstants'
 import { logout } from './userActions'
+import AuthContext from '../AuthContext';
 
 export const createOrder = (order) => async (dispatch, getState) => {
   try {
@@ -31,13 +33,6 @@ export const createOrder = (order) => async (dispatch, getState) => {
     const {
       userLogin: { userInfo },
     } = getState()
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        // Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
     
     const books = order.orderItems.map((book) => {
       return {
@@ -53,10 +48,8 @@ export const createOrder = (order) => async (dispatch, getState) => {
       books 
     }
 
-    console.log("orderInfo: ", orderInfo)
-
-    // TODO This should be current user !!
-    const currentUserID = 1;
+    const currentUser = useContext(AuthContext);
+    const currentUserID = currentUser.id;
     const { data } = await axios.post(`http://localhost:8080/api/v1/customers/${currentUserID}/orders`, orderInfo)
 
     dispatch({

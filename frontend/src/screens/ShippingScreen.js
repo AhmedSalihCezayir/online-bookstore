@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Button, Form, FormControl, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import FormContainer from '../components/FormContainer';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { saveShippingAddress } from '../actions/cartActions';
+import AuthContext from '../AuthContext';
 
 import axios from 'axios';
 
@@ -14,6 +15,9 @@ const ShippingScreen = ({ history }) => {
 	const [userAddresses, setUserAddresses] = useState([]);
 	const [shippingAddress, setShippingAddress] = useState(shipping);
 	const [paymentAddress, setPaymentAddress] = useState(payment);
+	
+	const currentUser = useContext(AuthContext);
+	const currentUserID = currentUser.id;
 
 	const dispatch = useDispatch();
 
@@ -25,8 +29,6 @@ const ShippingScreen = ({ history }) => {
 
 	useEffect(() => {
 		const fetchAddresses = async () => {
-			// TODO This should be current user !!
-			const currentUserID = 1;
 			const { data } = await axios.get(`http://localhost:8080/api/v1/customers/${currentUserID}/addresses`);
 			setUserAddresses(data);
 		};

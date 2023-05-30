@@ -7,17 +7,10 @@ import Loader from '../components/Loader'
 import { getUserDetails, updateUserProfile } from '../actions/userActions'
 import { listMyOrders } from '../actions/orderActions'
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
-// import AuthContext from './AuthContext'
+import AuthContext from '../AuthContext'
 
 const ProfileScreen = ({ location, history }) => {
-  // const currentUser = useContext(AuthContext);
-  let currentUser = {
-    "id": 2,
-    "name": "sergen",
-    "email": "sergen@hotmail.com",
-    "password": "sergen123123",
-    "phoneNumber": "1234567890"
-  }
+  const currentUser = useContext(AuthContext);
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -46,7 +39,7 @@ const ProfileScreen = ({ location, history }) => {
       if (!currentUser.id || success) {
         dispatch({ type: USER_UPDATE_PROFILE_RESET })
         dispatch(getUserDetails(currentUser.id))
-        // dispatch(listMyOrders(currentUser.id))
+        dispatch(listMyOrders(currentUser.id))
       } else {
         setName(user.name)
         setEmail(user.email)

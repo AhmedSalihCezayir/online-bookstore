@@ -41,15 +41,18 @@ export const login = (email, password) => async (dispatch) => {
 	});
 
 	signInWithEmailAndPassword(auth, email, password)
-		.then((userCredential) => {
+		.then(async (userCredential) => {
 			// const user = userCredential.user;
+      const { data } = await axios.post(`http://localhost:8080/api/v1/customers/me`, {
+        email
+      });
+
 			dispatch({
 				type: USER_LOGIN_SUCCESS,
-				payload: null, // TODO Fetch the user from our sql db and save it
+				payload: data,
 			});
 
-      // TODO Fetch the user from our sql db and save it
-			localStorage.setItem('userInfo', JSON.stringify(null));
+			localStorage.setItem('userInfo', JSON.stringify(data));
 		})
 		.catch((error) => {
 			dispatch({

@@ -8,15 +8,12 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Paginate from '../components/Paginate';
 import { listProducts } from '../actions/productActions';
-// import AuthContext from './AuthContext';
+import AuthContext from '../AuthContext';
 
 const HomeScreen = ({ match }) => {
   const pageNumber = match.params.pageNumber || 0;
   const dispatch = useDispatch();
-  // const currentUser = useContext(AuthContext);
-  let currentUser = {
-    id: 2,
-  }
+  const currentUser = useContext(AuthContext);
 
   const [author, setAuthor] = useState('');
   const [title, setTitle] = useState('');

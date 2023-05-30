@@ -4,15 +4,13 @@ import { Link, useHistory } from 'react-router-dom'
 import { Card, Button, Row, Col, ListGroup, Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
-// import AuthContext from './AuthContext';
+import AuthContext from '../AuthContext';
 
 const Product = ({ product}) => {
   const [qty, setQty] = React.useState(1)
   const [wished, setWished] = React.useState(false)
-  // const currentUser = useContext(AuthContext);
-  let currentUser = {
-    id: 2,
-  }
+  const currentUser = useContext(AuthContext);
+
   const history = useHistory();
 
   const addToCartHandler = () => {

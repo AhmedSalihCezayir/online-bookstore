@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button, Form, Col } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import Message from '../components/Message';
+import AuthContext from '../AuthContext';
 
 import axios from 'axios';
 
@@ -13,10 +14,10 @@ const CreateAddress = ({ history }) => {
 	const [country, setCountry] = useState('');
 
 	const [error, setError] = useState(false);
-
-	const create = async () => {
-		// TODO This should be current user !!
-		const currentUserID = 1;
+	const currentUser = useContext(AuthContext);
+	const currentUserID = currentUser.id;
+	
+	const create = async () => {	
 		const addressInfo = {
 			streetAddress: address.trim(),
 			city: city.trim(),
