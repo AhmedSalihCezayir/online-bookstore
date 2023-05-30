@@ -43,9 +43,7 @@ export const login = (email, password) => async (dispatch) => {
 	signInWithEmailAndPassword(auth, email, password)
 		.then(async (userCredential) => {
 			// const user = userCredential.user;
-      const { data } = await axios.post(`http://localhost:8080/api/v1/customers/me`, {
-        email
-      });
+      const { data } = await axios.get(`http://localhost:8080/api/v1/customers/me?email=${email}`);
 
 			dispatch({
 				type: USER_LOGIN_SUCCESS,

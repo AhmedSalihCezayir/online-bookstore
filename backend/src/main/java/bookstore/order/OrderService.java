@@ -9,5 +9,7 @@ public interface OrderService {
 
     List<OrderDto> getOrdersByCustomer(Long customerId);
 
+    OrderDto getOrderById(Long orderId);
+
     OrderDto makeOrder(Long customerId, OrderRequest orderRequest);
 }

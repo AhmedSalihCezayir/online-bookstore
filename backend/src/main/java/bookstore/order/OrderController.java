@@ -22,6 +22,12 @@ public class OrderController {
         return new ResponseEntity<>(orderDtos, HttpStatus.OK);
     }
 
+    @GetMapping("/{order_id}")
+    public ResponseEntity<OrderDto> getOrderById(@PathVariable Long order_id) {
+        OrderDto orderDto = orderService.getOrderById(order_id);
+        return new ResponseEntity<>(orderDto, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<OrderDto> makeOrder(@PathVariable Long id, @RequestBody OrderRequest orderRequest) {
         OrderDto savedOrder = orderService.makeOrder(id, orderRequest);

@@ -10,7 +10,8 @@ const Product = ({ product}) => {
   const [qty, setQty] = React.useState(1)
   const [wished, setWished] = React.useState(false)
   const currentUser = useContext(AuthContext);
-
+  const currentUserID = currentUser?.id;
+  
   const history = useHistory();
 
   const addToCartHandler = () => {
@@ -19,14 +20,16 @@ const Product = ({ product}) => {
 
   const addToWishListHandler = async () => {
     try { 
-      if(!wished) {
-        await axios.post(`http://localhost:8080/api/v1/customers/${currentUser.id}/favourites`, {"bookId": product.id})
-        setWished(true)
-      } 
-      else {
-        await axios.delete(`http://localhost:8080/api/v1/customers/${currentUser.id}/favourites/${product.id}`)
-        setWished(false)
-      } 
+      if (currentUserID) {
+        if(!wished) {
+          setWished(true)
+          await axios.post(`http://localhost:8080/api/v1/customers/${currentUserID}/favourites`, {"bookId": product.id})
+        } 
+        else {
+          setWished(false)
+          await axios.delete(`http://localhost:8080/api/v1/customers/${currentUserID}/favourites/${product.id}`)
+        } 
+      }
     } catch (error) {
       console.log('Error changing the wishlist:', error);
     }

@@ -1,4 +1,3 @@
-import { useContext } from "react"
 import axios from 'axios'
 import { CART_CLEAR_ITEMS } from '../constants/cartConstants'
 import {
@@ -22,7 +21,6 @@ import {
   ORDER_DELIVER_REQUEST,
 } from '../constants/orderConstants'
 import { logout } from './userActions'
-import AuthContext from '../AuthContext';
 
 export const createOrder = (order) => async (dispatch, getState) => {
   try {
@@ -48,9 +46,7 @@ export const createOrder = (order) => async (dispatch, getState) => {
       books 
     }
 
-    const currentUser = useContext(AuthContext);
-    const currentUserID = currentUser.id;
-    const { data } = await axios.post(`http://localhost:8080/api/v1/customers/${currentUserID}/orders`, orderInfo)
+    const { data } = await axios.post(`http://localhost:8080/api/v1/customers/${order.currentUserID}/orders`, orderInfo)
 
     dispatch({
       type: ORDER_CREATE_SUCCESS,

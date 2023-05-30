@@ -5,6 +5,7 @@ import FormContainer from '../components/FormContainer';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { saveShippingAddress } from '../actions/cartActions';
 import AuthContext from '../AuthContext';
+import Loader from '../components/Loader';
 
 import axios from 'axios';
 
@@ -15,9 +16,10 @@ const ShippingScreen = ({ history }) => {
 	const [userAddresses, setUserAddresses] = useState([]);
 	const [shippingAddress, setShippingAddress] = useState(shipping);
 	const [paymentAddress, setPaymentAddress] = useState(payment);
-	
+	const [loading, setLoading] = useState(true);
+
 	const currentUser = useContext(AuthContext);
-	const currentUserID = currentUser.id;
+	const currentUserID = currentUser?.id;
 
 	const dispatch = useDispatch();
 
@@ -29,12 +31,20 @@ const ShippingScreen = ({ history }) => {
 
 	useEffect(() => {
 		const fetchAddresses = async () => {
-			const { data } = await axios.get(`http://localhost:8080/api/v1/customers/${currentUserID}/addresses`);
-			setUserAddresses(data);
+			if (currentUserID) {
+				const { data } = await axios.get(`http://localhost:8080/api/v1/customers/${currentUserID}/addresses`);
+				setUserAddresses(data);
+
+				if (data.length === 1) {
+					setShippingAddress(data);
+					setPaymentAddress(data);
+				}
+				setLoading(false);
+			}
 		};
 
 		fetchAddresses();
-	}, []);
+	}, [currentUserID]);
 
 	const handleShipping = (event) => {
 		const selectedAddress = userAddresses.find((address) => address.streetAddress === event.target.value);
@@ -45,6 +55,10 @@ const ShippingScreen = ({ history }) => {
 		const selectedAddress = userAddresses.find((address) => address.streetAddress === event.target.value);
 		setPaymentAddress(selectedAddress);
 	};
+
+	if (loading) {
+		return <Loader />;
+	}
 
 	return (
 		<FormContainer>

@@ -17,8 +17,8 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping("/me")
-    public ResponseEntity<CustomerDto> me(@RequestBody MeRequest meRequest) {
-        CustomerDto customerDto = customerService.me(meRequest.getEmail());
+    public ResponseEntity<CustomerDto> me(@RequestParam String email) {
+        CustomerDto customerDto = customerService.me(email);
         return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
 

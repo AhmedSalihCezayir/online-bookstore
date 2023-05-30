@@ -55,6 +55,13 @@ public class OrderServiceImpl implements OrderService{
         return orders.stream().map(this::mapOrderToDto).collect(Collectors.toList());
     }
 
+    @Override
+    public OrderDto getOrderById(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
+        return mapOrderToDto(order);
+    }
+
     @Transactional
     @Override
     public OrderDto makeOrder(Long customerId, OrderRequest orderRequest) {

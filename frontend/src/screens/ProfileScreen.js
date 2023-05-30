@@ -36,16 +36,11 @@ const ProfileScreen = ({ location, history }) => {
     if (!currentUser) {
       history.push('/login')
     } else {
-      if (!currentUser.id || success) {
-        dispatch({ type: USER_UPDATE_PROFILE_RESET })
-        dispatch(getUserDetails(currentUser.id))
-        dispatch(listMyOrders(currentUser.id))
-      } else {
-        setName(user.name)
-        setEmail(user.email)
-      }
+        dispatch(listMyOrders(currentUser?.id))
+        setName(currentUser.name)
+        setEmail(currentUser.email)
     }
-  }, [dispatch, history, userInfo, user, success])
+  }, [dispatch, history, userInfo, currentUser, success])
 
   const submitHandler = (e) => {
     e.preventDefault()

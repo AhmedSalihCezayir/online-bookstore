@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Row, Col, ListGroup, Image, Card, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,6 +7,7 @@ import CheckoutSteps from '../components/CheckoutSteps';
 import { createOrder } from '../actions/orderActions';
 import { ORDER_CREATE_RESET } from '../constants/orderConstants';
 import { USER_DETAILS_RESET } from '../constants/userConstants';
+import AuthContext from '../AuthContext';
 
 import axios from 'axios';
 
@@ -15,6 +16,9 @@ const PlaceOrderScreen = ({ history }) => {
 	const [coupon, setCoupon] = useState('');
 	const [discount, setDiscount] = useState(null);
 	const [couponError, setCouponError] = useState(false);
+
+	const currentUser = useContext(AuthContext);
+	const currentUserID = currentUser.id;
 
 	const cart = useSelector((state) => state.cart);
 
@@ -37,7 +41,7 @@ const PlaceOrderScreen = ({ history }) => {
 
 	useEffect(() => {
 		if (success) {
-			history.push(`/order/${order._id}`);
+			history.push(`/order/${order.id}`);
 			dispatch({ type: USER_DETAILS_RESET });
 			dispatch({ type: ORDER_CREATE_RESET });
 		}
@@ -45,18 +49,21 @@ const PlaceOrderScreen = ({ history }) => {
 	}, [history, success]);
 
 	const placeOrderHandler = () => {
-		dispatch(
-			createOrder({
-				orderItems: cart.cartItems,
-				shippingAddress: cart.shippingAddress,
-				paymentAddress: cart.paymentAddress,
-				paymentMethod: cart.paymentMethod,
-				itemsPrice: cart.itemsPrice,
-				totalPrice: cart.totalPrice,
-				discount,
-				coupon,
-			})
-		);
+		if (currentUserID) {
+			dispatch(
+				createOrder({
+					currentUserID,
+					orderItems: cart.cartItems,
+					shippingAddress: cart.shippingAddress,
+					paymentAddress: cart.paymentAddress,
+					paymentMethod: cart.paymentMethod,
+					itemsPrice: cart.itemsPrice,
+					totalPrice: cart.totalPrice,
+					discount,
+					coupon,
+				})
+			);
+		}
 	};
 
 	const validateCoupon = async () => {

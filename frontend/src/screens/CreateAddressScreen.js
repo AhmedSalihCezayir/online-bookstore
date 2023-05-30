@@ -15,9 +15,9 @@ const CreateAddress = ({ history }) => {
 
 	const [error, setError] = useState(false);
 	const currentUser = useContext(AuthContext);
-	const currentUserID = currentUser.id;
-	
-	const create = async () => {	
+	const currentUserID = currentUser?.id;
+
+	const create = async () => {
 		const addressInfo = {
 			streetAddress: address.trim(),
 			city: city.trim(),
@@ -27,9 +27,11 @@ const CreateAddress = ({ history }) => {
 		};
 
 		try {
-			await axios.post(`http://localhost:8080/api/v1/customers/${currentUserID}/addresses`, addressInfo);
-			setError(false);
-			history.push('/shipping');
+			if (currentUserID) {
+				await axios.post(`http://localhost:8080/api/v1/customers/${currentUserID}/addresses`, addressInfo);
+				setError(false);
+				history.push('/shipping');
+			}
 		} catch (e) {
 			console.error(e.response);
 			setError(true);
