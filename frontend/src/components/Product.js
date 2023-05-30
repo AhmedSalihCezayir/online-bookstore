@@ -23,11 +23,11 @@ const Product = ({ product}) => {
       if (currentUserID) {
         if(!wished) {
           setWished(true)
-          await axios.post(`http://localhost:8080/api/v1/customers/${currentUserID}/favourites`, {"bookId": product.id})
+          await axios.post(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${currentUserID}/favourites`, {"bookId": product.id})
         } 
         else {
           setWished(false)
-          await axios.delete(`http://localhost:8080/api/v1/customers/${currentUserID}/favourites/${product.id}`)
+          await axios.delete(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${currentUserID}/favourites/${product.id}`)
         } 
       }
     } catch (error) {

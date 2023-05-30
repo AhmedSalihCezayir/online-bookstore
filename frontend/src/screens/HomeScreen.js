@@ -37,7 +37,7 @@ const HomeScreen = ({ match }) => {
 		// Fetch genre options from the database
 		const fetchGenres = async () => {
 			try {
-				let genresInDB = await axios.get(`http://localhost:8080/api/v1/genres`);
+				let genresInDB = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/genres`);
 				setGenreChoices(genresInDB.data);
 			} catch (error) {
 				console.log('Error fetching genres:', error);
@@ -47,18 +47,18 @@ const HomeScreen = ({ match }) => {
 		fetchGenres();
 	}, []);
 
-	const handleFilterChange = (e) => {
-		const { name, value } = e.target;
-		if (name === 'author') {
-			setAuthor(value);
-		} else if (name === 'title') {
-			setTitle(value);
-		} else if (name === 'publicationYear') {
-			setPublicationYear(value);
-		} else if (name === 'genre') {
-			setGenre(value);
-		}
-	};
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    if (name === 'author') {
+      setAuthor(value.trim());
+    } else if (name === 'title') {
+      setTitle(value.trim());
+    } else if (name === 'publicationYear') {
+      setPublicationYear(value.trim());
+    } else if (name === 'genre') {
+      setGenre(value.trim());
+    }
+  };
 
 	const handleFilterApply = () => {
 		const temp = {};

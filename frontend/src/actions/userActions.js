@@ -43,7 +43,7 @@ export const login = (email, password) => async (dispatch) => {
 	signInWithEmailAndPassword(auth, email, password)
 		.then(async (userCredential) => {
 			// const user = userCredential.user;
-      const { data } = await axios.get(`http://localhost:8080/api/v1/customers/me?email=${email}`);
+      const { data } = await axios.post(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/me=email=${email}`,);
 
 			dispatch({
 				type: USER_LOGIN_SUCCESS,
@@ -100,7 +100,7 @@ export const register = (name, phoneNumber, email, password) => async (dispatch)
 			});
 
       try {
-        const { data } = await axios.post(`http://localhost:8080/api/v1/customers`, {
+        const { data } = await axios.post(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers`, {
           name,
           email,
           password,
@@ -125,7 +125,7 @@ export const getUserDetails = (id) => async (dispatch) => {
       type: USER_DETAILS_REQUEST,
     })
 
-    const { data } = await axios.get(`http://localhost:8080/api/v1/customers/${id}`)
+    const { data } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${id}`)
 
     dispatch({
       type: USER_DETAILS_SUCCESS,
@@ -152,7 +152,7 @@ export const updateUserProfile = (user) => async (dispatch) => {
       type: USER_UPDATE_PROFILE_REQUEST,
     })
 
-    const { data } = await axios.post(`http://localhost:8080/api/v1/customers`, user)
+    const { data } = await axios.post(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers`, user)
 
     dispatch({
       type: USER_UPDATE_PROFILE_SUCCESS,
@@ -195,7 +195,7 @@ export const listUsers = () => async (dispatch, getState) => {
     // }
 
     // const { data } = await axios.get(`/api/customers`, config)
-    const { data } = await axios.get(`http://localhost:8080/api/v1/customers`)
+    const { data } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers`)
 
     dispatch({
       type: USER_LIST_SUCCESS,
@@ -234,7 +234,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
 
     // await axios.delete(`/api/customers/${id}`, config)
 
-    const { data } = await axios.delete(`http://localhost:8080/api/v1/customers/${id}`)
+    const { data } = await axios.delete(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${id}`)
 
     dispatch({ type: USER_DELETE_SUCCESS })
   } catch (error) {
@@ -271,7 +271,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
 
     // const { data } = await axios.post(`/api/customers/`, user, config)
 
-    const { data } = await axios.post(`http://localhost:8080/api/v1/customers`, user)
+    const { data } = await axios.post(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers`, user)
     dispatch({ type: USER_UPDATE_SUCCESS })
 
     dispatch({ type: USER_DETAILS_SUCCESS, payload: data })

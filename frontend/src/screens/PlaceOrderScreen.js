@@ -68,7 +68,7 @@ const PlaceOrderScreen = ({ history }) => {
 
 	const validateCoupon = async () => {
 		try {
-			const { data } = await axios.post(`http://localhost:8080/api/v1/coupons`, { couponCode: coupon });
+			const { data } = await axios.post(`https://centered-motif-384420.uc.r.appspot.com/api/v1/coupons`, { couponCode: coupon });
 			setDiscount(data.discountAmount);
 			setCouponError(false);
 		} catch (error) {

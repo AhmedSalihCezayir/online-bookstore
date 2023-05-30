@@ -46,7 +46,7 @@ export const createOrder = (order) => async (dispatch, getState) => {
       books 
     }
 
-    const { data } = await axios.post(`http://localhost:8080/api/v1/customers/${order.currentUserID}/orders`, orderInfo)
+    const { data } = await axios.post(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${order.currentUserID}/orders`, orderInfo)
 
     dispatch({
       type: ORDER_CREATE_SUCCESS,
@@ -204,7 +204,7 @@ export const listMyOrders = (userID) => async (dispatch) => {
       type: ORDER_LIST_MY_REQUEST,
     })
     console.log("userID: ", userID)
-    const { data } = await axios.get(`http://localhost:8080/api/v1/customers/${userID}/orders`)
+    const { data } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${userID}/orders`)
 
     dispatch({
       type: ORDER_LIST_MY_SUCCESS,

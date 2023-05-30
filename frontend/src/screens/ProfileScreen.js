@@ -71,7 +71,7 @@ const ProfileScreen = ({ location, history }) => {
                 type='text'
                 placeholder='Enter name'
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value.trim())}
               ></Form.Control>
             </Form.Group>
 
@@ -81,7 +81,7 @@ const ProfileScreen = ({ location, history }) => {
                 type='email'
                 placeholder='Enter email'
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value.trim())}
               ></Form.Control>
             </Form.Group>
 
@@ -91,7 +91,7 @@ const ProfileScreen = ({ location, history }) => {
                 type='password'
                 placeholder='Enter password'
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value.trim())}
               ></Form.Control>
             </Form.Group>
 
@@ -101,7 +101,7 @@ const ProfileScreen = ({ location, history }) => {
                 type='password'
                 placeholder='Confirm password'
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={(e) => setConfirmPassword(e.target.value.trim())}
               ></Form.Control>
             </Form.Group>
 

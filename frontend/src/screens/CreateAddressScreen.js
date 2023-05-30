@@ -28,7 +28,7 @@ const CreateAddress = ({ history }) => {
 
 		try {
 			if (currentUserID) {
-				await axios.post(`http://localhost:8080/api/v1/customers/${currentUserID}/addresses`, addressInfo);
+				await axios.post(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${currentUserID}/addresses`, addressInfo);
 				setError(false);
 				history.push('/shipping');
 			}

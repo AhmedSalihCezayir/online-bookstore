@@ -108,7 +108,7 @@ const ProductEditScreen = ({ match, history }) => {
                 type='text'
                 placeholder='Enter title'
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => setTitle(e.target.value.trim())}
               ></Form.Control>
             </Form.Group>
 
@@ -118,7 +118,7 @@ const ProductEditScreen = ({ match, history }) => {
                 type='text'
                 placeholder='Enter author name'
                 value={authorName}
-                onChange={(e) => setAuthorName(e.target.value)}
+                onChange={(e) => setAuthorName(e.target.value.trim())}
               ></Form.Control>
             </Form.Group>
 
@@ -128,7 +128,7 @@ const ProductEditScreen = ({ match, history }) => {
                 type='text'
                 placeholder='Enter Publisher'
                 value={publisher}
-                onChange={(e) => setPublisher(e.target.value)}
+                onChange={(e) => setPublisher(e.target.value.trim())}
               ></Form.Control>
             </Form.Group>
 
@@ -138,7 +138,7 @@ const ProductEditScreen = ({ match, history }) => {
                 type='text'
                 placeholder='Enter publication year'
                 value={publicationYear}
-                onChange={(e) => setPublicationYear(e.target.value)}
+                onChange={(e) => setPublicationYear(e.target.value.trim())}
               ></Form.Control>
             </Form.Group>
 
@@ -148,7 +148,7 @@ const ProductEditScreen = ({ match, history }) => {
                 type='text'
                 placeholder='Enter ISBN'
                 value={isbn}
-                onChange={(e) => setIsbn(e.target.value)}
+                onChange={(e) => setIsbn(e.target.value.trim())}
               ></Form.Control>
             </Form.Group>
 
@@ -158,7 +158,7 @@ const ProductEditScreen = ({ match, history }) => {
                 type='number'
                 placeholder='Enter page number'
                 value={pageNumber}
-                onChange={(e) => setPageNumber(e.target.value)}
+                onChange={(e) => setPageNumber(e.target.value.trim())}
               ></Form.Control>
             </Form.Group>
 
@@ -168,7 +168,7 @@ const ProductEditScreen = ({ match, history }) => {
                 type='number'
                 placeholder='Enter price'
                 value={price}
-                onChange={(e) => setPrice(e.target.value)}
+                onChange={(e) => setPrice(e.target.value.trim())}
               ></Form.Control>
             </Form.Group>
 
@@ -178,7 +178,7 @@ const ProductEditScreen = ({ match, history }) => {
                 type='number'
                 placeholder='Enter purchase price'
                 value={purchasePrice}
-                onChange={(e) => setPurchasePrice(e.target.value)}
+                onChange={(e) => setPurchasePrice(e.target.value.trim())}
               ></Form.Control>
             </Form.Group>
 
@@ -188,7 +188,7 @@ const ProductEditScreen = ({ match, history }) => {
                 type='number'
                 placeholder='Enter quantity'
                 value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
+                onChange={(e) => setQuantity(e.target.value.trim())}
               ></Form.Control>
             </Form.Group>
 
@@ -198,7 +198,7 @@ const ProductEditScreen = ({ match, history }) => {
                 type='text'
                 placeholder='Enter genres'
                 value={tempGenre}
-                onChange={(e) => setTempGenre(e.target.value)}
+                onChange={(e) => setTempGenre(e.target.value.trim())}
               ></Form.Control>
             </Form.Group>
 

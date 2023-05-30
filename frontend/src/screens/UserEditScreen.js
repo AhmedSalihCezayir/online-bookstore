@@ -68,7 +68,7 @@ const UserEditScreen = ({ match, history }) => {
                 type='name'
                 placeholder='Enter name'
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value.trim())}
               ></Form.Control>
             </Form.Group>
 
@@ -78,7 +78,7 @@ const UserEditScreen = ({ match, history }) => {
                 type='email'
                 placeholder='Enter email'
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value.trim())}
               ></Form.Control>
             </Form.Group>
 

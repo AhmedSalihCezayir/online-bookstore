@@ -32,7 +32,7 @@ const ShippingScreen = ({ history }) => {
 	useEffect(() => {
 		const fetchAddresses = async () => {
 			if (currentUserID) {
-				const { data } = await axios.get(`http://localhost:8080/api/v1/customers/${currentUserID}/addresses`);
+				const { data } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${currentUserID}/addresses`);
 				setUserAddresses(data);
 
 				if (data.length === 1) {
