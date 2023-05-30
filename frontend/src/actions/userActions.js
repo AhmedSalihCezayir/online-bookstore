@@ -43,7 +43,7 @@ export const login = (email, password) => async (dispatch) => {
 	signInWithEmailAndPassword(auth, email, password)
 		.then(async (userCredential) => {
 			// const user = userCredential.user;
-      const { data } = await axios.post(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/me=email=${email}`,);
+      const { data } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/me?email=${email}`);
 
 			dispatch({
 				type: USER_LOGIN_SUCCESS,

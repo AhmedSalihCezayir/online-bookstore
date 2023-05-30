@@ -11,7 +11,7 @@ const AuthProvider = ({ children }) => {
 	useEffect(() => {
 		onAuthStateChanged(auth, async (user) => {
 			if (user) {
-				const { data } = await axios.get(`http://localhost:8080/api/v1/customers/me?email=${user.email}`);
+				const { data } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/me?email=${user.email}`);
 				setCurrentUser(data);
 			} else {
 				setCurrentUser(user);

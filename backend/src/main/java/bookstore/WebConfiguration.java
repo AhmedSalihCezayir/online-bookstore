@@ -9,6 +9,6 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedMethods("*").allowedOrigins("http://localhost:3000");
+        registry.addMapping("/**").allowedMethods("*").allowedOrigins("https://frontend-dot-centered-motif-384420.uc.r.appspot.com");
     }
 }

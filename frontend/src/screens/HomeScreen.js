@@ -28,9 +28,7 @@ const HomeScreen = ({ match }) => {
 	const { loading, error, products, page, pages } = productList;
 
 	useEffect(() => {
-		if (currentUserID) {
-			dispatch(listProducts(pageNumber, true, filters, null, currentUserID));
-		}
+		dispatch(listProducts(pageNumber, true, filters, null, currentUserID));
 	}, [dispatch, pageNumber, filters, currentUserID]);
 
 	useEffect(() => {
@@ -47,18 +45,18 @@ const HomeScreen = ({ match }) => {
 		fetchGenres();
 	}, []);
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    if (name === 'author') {
-      setAuthor(value.trim());
-    } else if (name === 'title') {
-      setTitle(value.trim());
-    } else if (name === 'publicationYear') {
-      setPublicationYear(value.trim());
-    } else if (name === 'genre') {
-      setGenre(value.trim());
-    }
-  };
+	const handleFilterChange = (e) => {
+		const { name, value } = e.target;
+		if (name === 'author') {
+			setAuthor(value.trim());
+		} else if (name === 'title') {
+			setTitle(value.trim());
+		} else if (name === 'publicationYear') {
+			setPublicationYear(value.trim());
+		} else if (name === 'genre') {
+			setGenre(value.trim());
+		}
+	};
 
 	const handleFilterApply = () => {
 		const temp = {};
@@ -79,23 +77,21 @@ const HomeScreen = ({ match }) => {
 	};
 
 	const handleButtonClick = (button) => {
-		if (currentUserID) {
-			setSelectedButton(button);
-			let sortingType;
-			const tempFilters = {};
-			// Update the product listing based on the selected button
-			if (button === 'filter') {
-				dispatch(listProducts(pageNumber, true, filters, null, currentUserID));
-			} else {
-				if (button === 'popular') {
-					sortingType = 0;
-				} else if (button === 'new') {
-					sortingType = 1;
-				} else if (button === 'wishlist') {
-					sortingType = 2;
-				}
-				dispatch(listProducts(pageNumber, true, tempFilters, sortingType, currentUserID));
+		setSelectedButton(button);
+		let sortingType;
+		const tempFilters = {};
+		// Update the product listing based on the selected button
+		if (button === 'filter') {
+			dispatch(listProducts(pageNumber, true, filters, null, currentUserID));
+		} else {
+			if (button === 'popular') {
+				sortingType = 0;
+			} else if (button === 'new') {
+				sortingType = 1;
+			} else if (button === 'wishlist') {
+				sortingType = 2;
 			}
+			dispatch(listProducts(pageNumber, true, tempFilters, sortingType, currentUserID));
 		}
 	};
 

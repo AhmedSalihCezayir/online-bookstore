@@ -73,7 +73,7 @@ const OrderScreen = ({ match, history }) => {
 		// }
 		const fetchOrderInfo = async () => {
 			setLoading(true);
-			const { data } = await axios.get(`http://localhost:8080/api/v1/customers/${currentUserID}/orders/${orderID}`);
+			const { data } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${currentUserID}/orders/${orderID}`);
       console.log("data: ", data)
 			setOrder(data);
 			setLoading(false);
