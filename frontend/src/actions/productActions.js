@@ -28,7 +28,7 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
     dispatch({ type: PRODUCT_LIST_REQUEST })
 
     let info = {}
-    let url = "http://localhost:8080/api/v1/books"
+    let url = "https://centered-motif-384420.uc.r.appspot.com/api/v1/books"
     
     if(ifBook){
       if(filters && Object.keys(filters).length !== 0){  
@@ -147,7 +147,7 @@ export const deleteProduct = (ids) => async (dispatch, getState) => {
     //   },
     // }
 
-    // await axios.delete(`http://localhost:8080/api/v1/books/${id}`, config)
+    // await axios.delete(`https://centered-motif-384420.uc.r.appspot.com/api/v1/books/${id}`, config)
 
     const { inventoryId, bookId } = ids
 
@@ -333,7 +333,7 @@ export const listTopProducts = () => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_TOP_REQUEST })
 
-    const { data } = await axios.get(`http://localhost:8080/api/v1/books?page=0&size=10`)
+    const { data } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/books?page=0&size=10`)
     let popularBooks = data.content.filter((product) => product.countVisit >= 0)
     
     popularBooks = popularBooks.sort((a, b) => (a.countVisit < b.countVisit ? 1 : -1))
