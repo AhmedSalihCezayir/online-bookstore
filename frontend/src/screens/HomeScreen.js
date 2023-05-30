@@ -35,7 +35,7 @@ const HomeScreen = ({ match }) => {
     const fetchGenres = async () => {
       try {
         let genresInDB = await axios.get(
-          `http://localhost:8080/api/v1/genres`,
+          `https://centered-motif-384420.uc.r.appspot.com/api/v1/genres`,
         )
         setGenreChoices(genresInDB.data);
       } catch (error) {

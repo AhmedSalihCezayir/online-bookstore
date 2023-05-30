@@ -20,11 +20,11 @@ const Product = ({ product}) => {
   const addToWishListHandler = async () => {
     try { 
       if(!wished) {
-        await axios.post(`http://localhost:8080/api/v1/customers/${currentUser.id}/favourites`, {"bookId": product.id})
+        await axios.post(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${currentUser.id}/favourites`, {"bookId": product.id})
         setWished(true)
       } 
       else {
-        await axios.delete(`http://localhost:8080/api/v1/customers/${currentUser.id}/favourites/${product.id}`)
+        await axios.delete(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${currentUser.id}/favourites/${product.id}`)
         setWished(false)
       } 
     } catch (error) {

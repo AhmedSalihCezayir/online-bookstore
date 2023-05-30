@@ -63,7 +63,7 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
       console.log("URL", url)
       
       if(customerId){
-        const { data: wishList } = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/favourites`)
+        const { data: wishList } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${customerId}/favourites`)
 
         const updatedBooks = data.content.map((book) => {
           const matchingWishlistItem = wishList.find((wishlistItem) => wishlistItem.book.id === book.id);
@@ -91,7 +91,7 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
     }
     else {
       // Get every inventory
-      const { data } = await axios.get("http://localhost:8080/api/v1/inventories")
+      const { data } = await axios.get("https://centered-motif-384420.uc.r.appspot.com/api/v1/inventories")
       info = data
     }
 
@@ -114,7 +114,7 @@ export const listProductDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAILS_REQUEST })
 
-    const { data } = await axios.get(`http://localhost:8080/api/v1/inventories/${id}`)
+    const { data } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/inventories/${id}`)
 
     dispatch({
       type: PRODUCT_DETAILS_SUCCESS,
@@ -151,7 +151,7 @@ export const deleteProduct = (ids) => async (dispatch, getState) => {
 
     const { inventoryId, bookId } = ids
 
-    await axios.delete(`http://localhost:8080/api/v1/inventories/${inventoryId}`)
+    await axios.delete(`https://centered-motif-384420.uc.r.appspot.com/api/v1/inventories/${inventoryId}`)
 
     dispatch({
       type: PRODUCT_DELETE_SUCCESS,
@@ -201,7 +201,7 @@ export const createProduct = () => async (dispatch, getState) => {
       "genres": [],
     }
 
-    let { data } = await axios.post(`http://localhost:8080/api/v1/books`, newBook)
+    let { data } = await axios.post(`https://centered-motif-384420.uc.r.appspot.com/api/v1/books`, newBook)
 
     const newInventory = {
       book: data,
@@ -211,7 +211,7 @@ export const createProduct = () => async (dispatch, getState) => {
       "lastUpdated": new Date(),
     }
 
-    const result = await axios.post(`http://localhost:8080/api/v1/inventories`, newInventory)
+    const result = await axios.post(`https://centered-motif-384420.uc.r.appspot.com/api/v1/inventories`, newInventory)
 
     dispatch({
       type: PRODUCT_CREATE_SUCCESS,
@@ -257,7 +257,7 @@ export const updateProduct = (product) => async (dispatch, getState) => {
 
     //get genres
     let genresInDB = await axios.get(
-      `http://localhost:8080/api/v1/genres`,
+      `https://centered-motif-384420.uc.r.appspot.com/api/v1/genres`,
     )
 
     genresInDB = genresInDB.data
@@ -278,13 +278,13 @@ export const updateProduct = (product) => async (dispatch, getState) => {
         newGenre = { name: genreName.toLowerCase() };
         
         let { data } = await axios.post(
-          `http://localhost:8080/api/v1/genres`,
+          `https://centered-motif-384420.uc.r.appspot.com/api/v1/genres`,
           newGenre
         ) // Now new genre have an id
 
         // get genres
         let genresInDBTemp = await axios.get(
-          `http://localhost:8080/api/v1/genres`,
+          `https://centered-motif-384420.uc.r.appspot.com/api/v1/genres`,
         )
 
         genresInDBTemp = genresInDBTemp.data
@@ -297,7 +297,7 @@ export const updateProduct = (product) => async (dispatch, getState) => {
     product.book.genres = updatedGenresOfBook;
 
     const { data } = await axios.post(
-      `http://localhost:8080/api/v1/books`,
+      `https://centered-motif-384420.uc.r.appspot.com/api/v1/books`,
       product.book
     )
 
@@ -305,7 +305,7 @@ export const updateProduct = (product) => async (dispatch, getState) => {
     product.lastAcquired = product.lastUpdated;
 
     let result = await axios.post(
-      `http://localhost:8080/api/v1/inventories`,
+      `https://centered-motif-384420.uc.r.appspot.com/api/v1/inventories`,
       product
     )
 

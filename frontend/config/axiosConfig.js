@@ -5,7 +5,7 @@ import axios from 'axios';
 // 		? 'http://localhost:8080'
 // 		: 'http://real_backend_domain';
 
-const baseURL = 'http://localhost:8080';
+const baseURL = 'https://centered-motif-384420.uc.r.appspot.com';
 
 const backendClient = axios.create({ baseURL, withCredentials: true });
 
