@@ -28,6 +28,12 @@ public class OrderController {
         return new ResponseEntity<>(orderDto, HttpStatus.OK);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<OrderDto>> getAllOrders() {
+        List<OrderDto> orderDto = orderService.getAllOrders();
+        return new ResponseEntity<>(orderDto, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<OrderDto> makeOrder(@PathVariable Long id, @RequestBody OrderRequest orderRequest) {
         OrderDto savedOrder = orderService.makeOrder(id, orderRequest);

@@ -62,6 +62,12 @@ public class OrderServiceImpl implements OrderService{
         return mapOrderToDto(order);
     }
 
+    @Override
+    public List<OrderDto> getAllOrders() {
+        List<Order> orders = orderRepository.findAll();
+        return orders.stream().map(this::mapOrderToDto).collect(Collectors.toList());
+    }
+
     @Transactional
     @Override
     public OrderDto makeOrder(Long customerId, OrderRequest orderRequest) {
@@ -134,6 +140,9 @@ public class OrderServiceImpl implements OrderService{
         order.calculatePrices();
         orderDto.setTotalPrice(order.getTotalPrice());
         orderDto.setDiscountedPrice(order.getDiscountedPrice());
+        orderDto.setCustomerName(order.getCustomer().getName());
+        orderDto.setCustomerId(order.getCustomer().getId());
+        orderDto.setCustomerEmail(order.getCustomer().getEmail());
         return orderDto;
     }
 

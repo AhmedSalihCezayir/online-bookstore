@@ -113,7 +113,7 @@ const ProductListScreen = ({ history, match }) => {
             </thead>
             <tbody>
               {products.map((product) => (
-                <tr key={product.id}>
+                <tr key={product?.id}>
                   <td>{product.book.id}</td>
                   <td>{product.book.title}</td>
                   <td>{product.book.authorName}</td>
@@ -126,7 +126,7 @@ const ProductListScreen = ({ history, match }) => {
                   <td>{product.quantity}</td>
                   <td>{product.id}</td>
                   <td>
-                    <LinkContainer to={`/admin/product/${product.id}/edit`}>
+                    <LinkContainer to={`/admin/product/${product?.id}/edit`}>
                       <Button variant='light' className='btn-sm'>
                         <i className='fas fa-edit'></i>
                       </Button>

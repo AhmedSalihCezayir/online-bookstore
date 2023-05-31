@@ -8,9 +8,10 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { listProducts } from '../actions/productActions';
 import AuthContext from '../AuthContext';
+import backendClient from '../config/axiosConfig';
 
-const HomeScreen = ({ match }) => {
-	const pageNumber = match.params.pageNumber || 0;
+const HomeScreen = ({ history, match }) => {
+	const pageNumber = match.params.pageNumber || 1;
 	const dispatch = useDispatch();
 	const currentUser = useContext(AuthContext);
 	const currentUserID = currentUser?.id;
@@ -27,6 +28,12 @@ const HomeScreen = ({ match }) => {
 	const { loading, error, products, page, pages } = productList;
 
 	useEffect(() => {
+		if (currentUser && currentUser.isAdmin) {
+			history.push("/admin/productlist")
+		}
+	}, [history, currentUser])
+
+	useEffect(() => {
 		dispatch(listProducts(pageNumber, true, filters, null, currentUserID));
 	}, [dispatch, pageNumber, filters, currentUserID]);
 
@@ -34,7 +41,7 @@ const HomeScreen = ({ match }) => {
 		// Fetch genre options from the database
 		const fetchGenres = async () => {
 			try {
-				let genresInDB = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/genres`);
+				let genresInDB = await backendClient.get(`/api/v1/genres`);
 				setGenreChoices(genresInDB.data);
 			} catch (error) {
 				console.log('Error fetching genres:', error);
@@ -76,6 +83,7 @@ const HomeScreen = ({ match }) => {
 	};
 
 	const handleButtonClick = (button) => {
+		console.log("button: ", button)
 		setSelectedButton(button);
 		let sortingType;
 		const tempFilters = {};

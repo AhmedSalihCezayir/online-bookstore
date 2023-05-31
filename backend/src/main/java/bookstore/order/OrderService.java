@@ -11,5 +11,7 @@ public interface OrderService {
 
     OrderDto getOrderById(Long orderId);
 
+    List<OrderDto> getAllOrders();
+
     OrderDto makeOrder(Long customerId, OrderRequest orderRequest);
 }

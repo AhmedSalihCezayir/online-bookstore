@@ -5,6 +5,7 @@ import Message from '../components/Message';
 import AuthContext from '../AuthContext';
 
 import axios from 'axios';
+import backendClient from '../config/axiosConfig';
 
 const CreateAddress = ({ history }) => {
 	const [address, setAddress] = useState('');
@@ -28,7 +29,7 @@ const CreateAddress = ({ history }) => {
 
 		try {
 			if (currentUserID) {
-				await axios.post(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${currentUserID}/addresses`, addressInfo);
+				await backendClient.post(`/api/v1/customers/${currentUserID}/addresses`, addressInfo);
 				setError(false);
 				history.push('/shipping');
 			}

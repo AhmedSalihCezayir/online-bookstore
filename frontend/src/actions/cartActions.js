@@ -5,9 +5,10 @@ import {
   CART_SAVE_SHIPPING_ADDRESS,
   CART_SAVE_PAYMENT_METHOD,
 } from '../constants/cartConstants'
+import backendClient from '../config/axiosConfig';
 
 export const addToCart = (id, qty) => async (dispatch, getState) => {
-	const { data } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/books/${id}`);
+	const { data } = await backendClient.get(`/api/v1/books/${id}`);
 
 	dispatch({
 		type: CART_ADD_ITEM,

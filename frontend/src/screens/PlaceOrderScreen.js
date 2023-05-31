@@ -10,6 +10,7 @@ import { USER_DETAILS_RESET } from '../constants/userConstants';
 import AuthContext from '../AuthContext';
 
 import axios from 'axios';
+import backendClient from '../config/axiosConfig';
 
 const PlaceOrderScreen = ({ history }) => {
 	const dispatch = useDispatch();
@@ -68,7 +69,7 @@ const PlaceOrderScreen = ({ history }) => {
 
 	const validateCoupon = async () => {
 		try {
-			const { data } = await axios.post(`https://centered-motif-384420.uc.r.appspot.com/api/v1/coupons`, { couponCode: coupon });
+			const { data } = await backendClient.post(`/api/v1/coupons`, { couponCode: coupon });
 			setDiscount(data.discountAmount);
 			setCouponError(false);
 		} catch (error) {

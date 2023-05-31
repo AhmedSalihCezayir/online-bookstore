@@ -5,6 +5,7 @@ import { Card, Button, Row, Col, ListGroup, Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import AuthContext from '../AuthContext';
+import backendClient from '../config/axiosConfig';
 
 const Product = ({ product}) => {
   const [qty, setQty] = React.useState(1)
@@ -20,14 +21,14 @@ const Product = ({ product}) => {
 
   const addToWishListHandler = async () => {
     try { 
-      if (currentUserID) {
+      if (currentUserID && !currentUser?.isAdmin) {
         if(!wished) {
           setWished(true)
-          await axios.post(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${currentUserID}/favourites`, {"bookId": product.id})
+          await backendClient.post(`/api/v1/customers/${currentUserID}/favourites`, {"bookId": product.id})
         } 
         else {
           setWished(false)
-          await axios.delete(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${currentUserID}/favourites/${product.id}`)
+          await backendClient.delete(`/api/v1/customers/${currentUserID}/favourites/${product.id}`)
         } 
       }
     } catch (error) {
@@ -55,7 +56,7 @@ const Product = ({ product}) => {
     </Card.Text>
     <Card.Text>Author: {product.authorName}</Card.Text>
     <Card.Text>Page No: {product.pageNumber}</Card.Text>
-    <Card.Text>Genres: {product.genres.map(genre => genre.name).join(', ')}</Card.Text>
+    <Card.Text>Genres: {product.genres && product.genres.map(genre => genre.name).join(', ')}</Card.Text>
     <Card.Text>Price: ${product.price} Stock: {qty}</Card.Text>
     <ListGroup variant='flush'>
       <ListGroup.Item>

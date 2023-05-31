@@ -8,6 +8,7 @@ import AuthContext from '../AuthContext';
 import Loader from '../components/Loader';
 
 import axios from 'axios';
+import backendClient from '../config/axiosConfig';
 
 const ShippingScreen = ({ history }) => {
 	const cart = useSelector((state) => state.cart);
@@ -32,7 +33,7 @@ const ShippingScreen = ({ history }) => {
 	useEffect(() => {
 		const fetchAddresses = async () => {
 			if (currentUserID) {
-				const { data } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${currentUserID}/addresses`);
+				const { data } = await backendClient.get(`/api/v1/customers/${currentUserID}/addresses`);
 				setUserAddresses(data);
 
 				if (data.length === 1) {

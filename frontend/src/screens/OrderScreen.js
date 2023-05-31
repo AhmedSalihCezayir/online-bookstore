@@ -9,6 +9,7 @@ import Loader from '../components/Loader';
 import { getOrderDetails, payOrder, deliverOrder } from '../actions/orderActions';
 import { ORDER_PAY_RESET, ORDER_DELIVER_RESET } from '../constants/orderConstants';
 import AuthContext from '../AuthContext';
+import backendClient from '../config/axiosConfig';
 
 const OrderScreen = ({ match, history }) => {
 	const orderID = match.params.id;
@@ -73,7 +74,7 @@ const OrderScreen = ({ match, history }) => {
 		// }
 		const fetchOrderInfo = async () => {
 			setLoading(true);
-			const { data } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${currentUserID}/orders/${orderID}`);
+			const { data } = await backendClient.get(`/api/v1/customers/${currentUserID}/orders/${orderID}`);
       console.log("data: ", data)
 			setOrder(data);
 			setLoading(false);
@@ -106,11 +107,11 @@ const OrderScreen = ({ match, history }) => {
 						<ListGroup.Item>
 							<h2>Shipping</h2>
 							<p>
-                <strong>Name: </strong> {currentUser?.name}
+                <strong>Name: </strong> {order.customerName}
               </p>
 							<p>
                 <strong>Email: </strong>{' '}
-                <a href={`mailto:${currentUser?.email}`}>{currentUser?.email}</a>
+                <a href={`mailto:${order.customerEmail}`}>{order.customerEmail}</a>
               </p>
 							<p>
 								<strong>Address:</strong>

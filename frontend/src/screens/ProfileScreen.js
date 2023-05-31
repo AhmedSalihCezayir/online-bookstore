@@ -125,6 +125,7 @@ const ProfileScreen = ({ location, history }) => {
                 <th>DATE</th>
                 <th>TOTAL</th>
                 <th>Tracking No</th>
+                <th>Company</th>
               </tr>
             </thead>
             <tbody>
@@ -132,9 +133,15 @@ const ProfileScreen = ({ location, history }) => {
                 <tr key={order.id}>
                   <td>{order.id}</td>
                   <td>{order.orderDate.substring(0, 10)}</td>
-                  <td>{order.totalPrice}</td>
+                  <td>{order.discountedPrice}</td>
                   <td>{order.shipping ? 
                     (order.shipping.trackingNo) 
+                    : (
+                      <i className='fas fa-times' style={{ color: 'red' }}></i>
+                    )}
+                  </td>
+                  <td>{order.shipping ? 
+                    (order.shipping.company) 
                     : (
                       <i className='fas fa-times' style={{ color: 'red' }}></i>
                     )}

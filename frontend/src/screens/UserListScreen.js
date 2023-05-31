@@ -67,18 +67,18 @@ const UserListScreen = ({ history }) => {
                   )}
                 </td>
                 <td>
-                  <LinkContainer to={`/admin/user/${user.id}/edit`}>
+                  {/* <LinkContainer to={`/admin/user/${user.id}/edit`}>
                     <Button variant='light' className='btn-sm'>
                       <i className='fas fa-edit'></i>
                     </Button>
-                  </LinkContainer>
-                  <Button
+                  </LinkContainer> */}
+                  {!user.isAdmin && (<Button
                     variant='danger'
                     className='btn-sm'
                     onClick={() => deleteHandler(user.id)}
                   >
                     <i className='fas fa-trash'></i>
-                  </Button>
+                  </Button>)}
                 </td>
               </tr>
             ))}

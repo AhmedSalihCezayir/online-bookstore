@@ -16,5 +16,8 @@ public class OrderDto {
     private BigDecimal discountedPrice;
     private String couponCode;
     private List<OrderBookDto> books;
+    private String customerName;
+    private Long customerId;
+    private String customerEmail;
 
 }

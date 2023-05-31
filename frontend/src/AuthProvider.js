@@ -4,6 +4,7 @@ import firebase from 'firebase/app';
 import { onAuthStateChanged } from 'firebase/auth';
 import auth from './firebase_config';
 import AuthContext from './AuthContext';
+import backendClient from './config/axiosConfig';
 
 const AuthProvider = ({ children }) => {
 	const [currentUser, setCurrentUser] = useState(null);
@@ -11,8 +12,16 @@ const AuthProvider = ({ children }) => {
 	useEffect(() => {
 		onAuthStateChanged(auth, async (user) => {
 			if (user) {
-				const { data } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/me?email=${user.email}`);
-				setCurrentUser(data);
+				try {
+					const { data } = await backendClient.get(`/api/v1/customers/me?email=${user.email}`);
+					setCurrentUser(data);
+				} catch (e) {
+					const { data } = await backendClient.get(`/api/v1/admins`);
+					//Find if any object in the admins array has same email as the user
+					const admin = data.find((admin) => admin.email === user.email);
+					admin.isAdmin = true;
+					setCurrentUser(admin);
+				}
 			} else {
 				setCurrentUser(user);
 			}

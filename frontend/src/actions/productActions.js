@@ -20,6 +20,7 @@ import {
   PRODUCT_TOP_FAIL,
 } from '../constants/productConstants'
 import { logout } from './userActions'
+import backendClient from '../config/axiosConfig'
 
 export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sortingType = null, customerId = null) => async (
   dispatch
@@ -28,7 +29,7 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
     dispatch({ type: PRODUCT_LIST_REQUEST })
 
     let info = {}
-    let url = "https://centered-motif-384420.uc.r.appspot.com/api/v1/books"
+    let url = "/api/v1/books"
     let totalPages;
 
     if(ifBook){
@@ -60,11 +61,11 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
         url += `?page=${pageNumber}&size=10`
       }
     
-      const { data } = await axios.get(url)
+      const { data } = await backendClient.get(url)
       console.log("URL", url)
       
       if(customerId){
-        const { data: wishList } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${customerId}/favourites`)
+        const { data: wishList } = await backendClient.get(`/api/v1/customers/${customerId}/favourites`)
 
         const updatedBooks = data.content.map((book) => {
           const matchingWishlistItem = wishList.find((wishlistItem) => wishlistItem.book.id === book.id);
@@ -93,7 +94,7 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
 
     else {
       // Get every inventory
-      const { data } = await axios.get("https://centered-motif-384420.uc.r.appspot.com/api/v1/inventories")
+      const { data } = await backendClient.get("/api/v1/inventories")
       info = data
     }
 
@@ -116,7 +117,7 @@ export const listProductDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAILS_REQUEST })
 
-    const { data } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/inventories/${id}`)
+    const { data } = await backendClient.get(`/api/v1/inventories/${id}`)
 
     dispatch({
       type: PRODUCT_DETAILS_SUCCESS,
@@ -153,7 +154,7 @@ export const deleteProduct = (ids) => async (dispatch, getState) => {
 
     const { inventoryId, bookId } = ids
 
-    await axios.delete(`https://centered-motif-384420.uc.r.appspot.com/api/v1/inventories/${inventoryId}`)
+    await backendClient.delete(`/api/v1/inventories/${inventoryId}`)
 
     dispatch({
       type: PRODUCT_DELETE_SUCCESS,
@@ -203,7 +204,7 @@ export const createProduct = () => async (dispatch, getState) => {
       "genres": [],
     }
 
-    let { data } = await axios.post(`https://centered-motif-384420.uc.r.appspot.com/api/v1/books`, newBook)
+    let { data } = await backendClient.post(`/api/v1/books`, newBook)
 
     const newInventory = {
       book: data,
@@ -213,7 +214,7 @@ export const createProduct = () => async (dispatch, getState) => {
       "lastUpdated": new Date(),
     }
 
-    const result = await axios.post(`https://centered-motif-384420.uc.r.appspot.com/api/v1/inventories`, newInventory)
+    const result = await backendClient.post(`/api/v1/inventories`, newInventory)
 
     dispatch({
       type: PRODUCT_CREATE_SUCCESS,
@@ -258,8 +259,8 @@ export const updateProduct = (product) => async (dispatch, getState) => {
     // )
 
     //get genres
-    let genresInDB = await axios.get(
-      `https://centered-motif-384420.uc.r.appspot.com/api/v1/genres`,
+    let genresInDB = await backendClient.get(
+      `/api/v1/genres`,
     )
 
     genresInDB = genresInDB.data
@@ -279,14 +280,14 @@ export const updateProduct = (product) => async (dispatch, getState) => {
         // Genre doesn't exist in the database, add it
         newGenre = { name: genreName.toLowerCase() };
         
-        let { data } = await axios.post(
-          `https://centered-motif-384420.uc.r.appspot.com/api/v1/genres`,
+        let { data } = await backendClient.post(
+          `/api/v1/genres`,
           newGenre
         ) // Now new genre have an id
 
         // get genres
-        let genresInDBTemp = await axios.get(
-          `https://centered-motif-384420.uc.r.appspot.com/api/v1/genres`,
+        let genresInDBTemp = await backendClient.get(
+          `/api/v1/genres`,
         )
 
         genresInDBTemp = genresInDBTemp.data
@@ -298,16 +299,16 @@ export const updateProduct = (product) => async (dispatch, getState) => {
     
     product.book.genres = updatedGenresOfBook;
 
-    const { data } = await axios.post(
-      `https://centered-motif-384420.uc.r.appspot.com/api/v1/books`,
+    const { data } = await backendClient.post(
+      `/api/v1/books`,
       product.book
     )
 
     product.lastUpdated = new Date();
     product.lastAcquired = product.lastUpdated;
 
-    let result = await axios.post(
-      `https://centered-motif-384420.uc.r.appspot.com/api/v1/inventories`,
+    let result = await backendClient.post(
+      `/api/v1/inventories`,
       product
     )
 
@@ -335,7 +336,7 @@ export const listTopProducts = () => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_TOP_REQUEST })
 
-    const { data } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/books?page=0&size=10`)
+    const { data } = await backendClient.get(`/api/v1/books?page=0&size=10`)
     let popularBooks = data.content.filter((product) => product.countVisit >= 0)
     
     popularBooks = popularBooks.sort((a, b) => (a.countVisit < b.countVisit ? 1 : -1))
