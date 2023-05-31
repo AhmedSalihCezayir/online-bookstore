@@ -29,7 +29,8 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
 
     let info = {}
     let url = "https://centered-motif-384420.uc.r.appspot.com/api/v1/books"
-    
+    let totalPages;
+
     if(ifBook){
       if(filters && Object.keys(filters).length !== 0){  
         if (filters.title && filters.title !== ""){
@@ -63,18 +64,18 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
       console.log("URL", url)
       
       if(customerId){
-        const { data: wishList } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${customerId}/favourites`)
+        const { data: wishList } = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/favourites`)
 
         const updatedBooks = data.content.map((book) => {
           const matchingWishlistItem = wishList.find((wishlistItem) => wishlistItem.book.id === book.id);
           return matchingWishlistItem ? { ...book, wishAddedAt: matchingWishlistItem.addedAt, wished: true} : {...book, wished: false};
         });
 
-        data.content = updatedBooks;
-        
+        data.content.books = updatedBooks;
+        totalPages = data.totalPages;
       }
 
-      info = data.content
+      info = data.content.books
 
       if(sortingType === 0){ //Sort by popularity
         info = info.slice(0,20).sort((a, b) => (a.countVisit < b.countVisit ? 1 : -1))
@@ -89,6 +90,7 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
         info = info.slice(0, 20).sort((a, b) => (a.wishAddedAt < b.wishAddedAt ? 1 : -1))
       }
     }
+
     else {
       // Get every inventory
       const { data } = await axios.get("https://centered-motif-384420.uc.r.appspot.com/api/v1/inventories")
@@ -97,7 +99,7 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
 
     dispatch({
       type: PRODUCT_LIST_SUCCESS,
-      payload: info,
+      payload: {info: info, pageNumber: totalPages}
     })
   } catch (error) {
     dispatch({
@@ -257,7 +259,7 @@ export const updateProduct = (product) => async (dispatch, getState) => {
 
     //get genres
     let genresInDB = await axios.get(
-      `https://centered-motif-384420.uc.r.appspot.com/api/v1/genres`,
+      `http://localhost:8080/api/v1/genres`,
     )
 
     genresInDB = genresInDB.data

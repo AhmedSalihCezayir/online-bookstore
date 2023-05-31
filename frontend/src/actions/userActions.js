@@ -45,6 +45,18 @@ export const login = (email, password) => async (dispatch) => {
 			// const user = userCredential.user;
       const { data } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/me?email=${email}`);
 
+      let admins = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/admins`);
+      admins = admins.data;
+
+      //Find if any object in the admins array has same email as the user
+      let isAdmin = admins.some((admin) => admin.email === data.email);
+
+      if (isAdmin) {
+        data.isAdmin = true;
+      } else {
+        data.isAdmin = false;
+      }
+      
 			dispatch({
 				type: USER_LOGIN_SUCCESS,
 				payload: data,

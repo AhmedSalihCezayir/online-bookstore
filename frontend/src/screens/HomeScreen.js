@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Row, Col, Form, Button } from 'react-bootstrap';
+import { Row, Col, Form, Button, Pagination } from 'react-bootstrap';
 import Product from '../components/Product';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -188,7 +188,19 @@ const HomeScreen = ({ match }) => {
 					)}
 				</div>
 			)}
-			<Paginate pages={pages} page={page} />
+      <Pagination>
+        <Pagination.Prev disabled={pageNumber === 1} onClick={() => handleButtonClick(pageNumber - 1)} />
+        {Array.from({ length: pages }, (_, index) => (
+          <Pagination.Item
+            key={index + 1}
+            active={index + 1 === pageNumber}
+            onClick={() => handleButtonClick(index + 1)}
+          >
+            {index + 1}
+          </Pagination.Item>
+        ))}
+        <Pagination.Next disabled={pageNumber === pages} onClick={() => handleButtonClick(pageNumber + 1)} />
+      </Pagination>
 		</>
 	);
 };

@@ -39,56 +39,37 @@ const Product = ({ product}) => {
     if (product.wished) {
       setWished(true)
     }
+
+    if(product.quantity <= 0) {
+      setQty("Out of Stock")
+    }
+    else {
+      setQty(product.quantity)
+    }
   }, [product])
 
   return (
     <Card className='my-3 p-3 rounded'>
-      <Card.Text as='h4' style={{marginTop:5, marginBottom:5}}>{product.title}</Card.Text>
-        <Card.Text>Author: {product.authorName}</Card.Text>
-        <Card.Text>Page No: {product.pageNumber}</Card.Text>
-        <Card.Text>Genres: {product.genres.map(genre => genre.name).join(', ')}</Card.Text> 
-        <Card.Text>Price: ${product.price}</Card.Text>
-        {product.quantity > 0 && <Card.Text>Stock: {product.quantity}</Card.Text>}
-        {product.quantity <= 0 && <Card.Text>Stock: Out of Stock</Card.Text>}
-        
-        {/* {product.countInStock > 0 && ( */}
-        <ListGroup variant='flush'>
-          {/* <ListGroup.Item>
-            <Row>
-              <Col>Qty</Col>
-              <Col>
-                <Form.Control
-                  as='select'
-                  value={qty}
-                  onChange={(e) => setQty(e.target.value)}
-                >
-                  {[...Array(product.countInStock).keys()].map(
-                    (x) => (
-                      <option key={x + 1} value={x + 1}>
-                        {x + 1}
-                      </option>
-                    )
-                  )}
-                </Form.Control>
-              </Col>
-            </Row>
-          </ListGroup.Item> */}
-          <ListGroup.Item>
-            <Row className='d-flex justify-content-md-center'>
-              <Button
-                onClick={addToCartHandler}
-                type='button'
-              >
-                Add To Cart
-              </Button>
-              <Button variant='link' className='text-danger' onClick={addToWishListHandler}>
-                {wished ? <FontAwesomeIcon icon={faHeart} /> : <FontAwesomeIcon icon={faHeart} style={{color: 'grey'}} />}
-              </Button>
-            </Row>
-        </ListGroup.Item>
-      </ListGroup>
-      {/* )} */}
-    </Card>
+    <Card.Text style={{ marginTop: 5, marginBottom: 5 }}>
+      <strong>{product.title}</strong>
+    </Card.Text>
+    <Card.Text>Author: {product.authorName}</Card.Text>
+    <Card.Text>Page No: {product.pageNumber}</Card.Text>
+    <Card.Text>Genres: {product.genres.map(genre => genre.name).join(', ')}</Card.Text>
+    <Card.Text>Price: ${product.price} Stock: {qty}</Card.Text>
+    <ListGroup variant='flush'>
+      <ListGroup.Item>
+        <Row className='d-flex justify-content-md-center'>
+          <Button onClick={addToCartHandler} type='button'>
+            Add To Cart
+          </Button>
+          <Button variant='link' className='text-danger' onClick={addToWishListHandler}>
+            {wished ? <FontAwesomeIcon icon={faHeart} /> : <FontAwesomeIcon icon={faHeart} style={{ color: 'grey' }} />}
+          </Button>
+        </Row>
+      </ListGroup.Item>
+    </ListGroup>
+  </Card>
   )
 }
 

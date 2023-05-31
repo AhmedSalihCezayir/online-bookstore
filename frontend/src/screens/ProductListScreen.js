@@ -13,7 +13,6 @@ import {
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 
 const ProductListScreen = ({ history, match }) => {
-  // const pageNumber = match.params.pageNumber || 0
 
   const dispatch = useDispatch()
 
@@ -41,13 +40,9 @@ const ProductListScreen = ({ history, match }) => {
   useEffect(() => {
     dispatch({ type: PRODUCT_CREATE_RESET })
 
-    // if (!userInfo || !userInfo.isAdmin) {
-    //   history.push('/login')
-    // }
-
-    // if (!userInfo) {
-    //   history.push('/login')
-    // }
+    if (!userInfo || !userInfo.isAdmin) {
+      history.push('/login')
+    }
 
     if (successCreate) {
       history.push(`/admin/product/${createdProduct.id}/edit`)
