@@ -22,13 +22,20 @@ const HomeScreen = ({ match }) => {
 	const [genreChoices, setGenreChoices] = useState([]); // New state variable to store the genre options from the database
 	const [filters, setFilters] = useState({});
 	const [selectedButton, setSelectedButton] = useState('popular'); // State variable to keep track of the selected button
+	const [sortingType, setSortingType] = useState(0); // State variable to keep track of the sorting type [0: popular, 1: new, 2: wishlist, 3:filters]
 
 	const productList = useSelector((state) => state.productList);
 	const { loading, error, products, page, pages } = productList;
 
 	useEffect(() => {
-		dispatch(listProducts(pageNumber, true, filters, null, currentUserID));
-	}, [dispatch, pageNumber, filters, currentUserID]);
+		let emptyFilters = {}
+		if(sortingType === 3) {
+			dispatch(listProducts(pageNumber, true, filters, sortingType, currentUserID));
+		}
+		else{
+			dispatch(listProducts(pageNumber, true, emptyFilters, sortingType, currentUserID));
+		}
+	}, [dispatch, pageNumber, filters, sortingType, currentUserID]);
 
 	useEffect(() => {
 		// Fetch genre options from the database
@@ -77,20 +84,17 @@ const HomeScreen = ({ match }) => {
 
 	const handleButtonClick = (button) => {
 		setSelectedButton(button);
-		let sortingType;
-		const tempFilters = {};
 		// Update the product listing based on the selected button
 		if (button === 'filter') {
-			dispatch(listProducts(pageNumber, true, filters, null, currentUserID));
+			setSortingType(3);
 		} else {
 			if (button === 'popular') {
-				sortingType = 0;
+				setSortingType(0);
 			} else if (button === 'new') {
-				sortingType = 1;
+				setSortingType(1);
 			} else if (button === 'wishlist') {
-				sortingType = 2;
+				setSortingType(2);
 			}
-			dispatch(listProducts(pageNumber, true, tempFilters, sortingType, currentUserID));
 		}
 	};
 
