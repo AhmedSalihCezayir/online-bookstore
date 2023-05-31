@@ -6,8 +6,11 @@ automatic_scaling:
   max_instances: 10
   target_throughput_utilization: 0.6
 handlers:
-- url: /
+- url: /(.*\.(json|ico|js|css))$
+  static_files: build/\1
+  upload: build/.*\.(json|ico|js|css)$
+- url: /static
+  static_dir: build/static
+- url: /.*
   static_files: build/index.html
   upload: build/index.html
-- url: /
-  static_dir: build
