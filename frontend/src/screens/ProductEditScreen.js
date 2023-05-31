@@ -60,6 +60,19 @@ const ProductEditScreen = ({ match, history }) => {
     }
   }, [dispatch, history, productId, successUpdate])
 
+  useEffect(() => {
+		setTitle(product?.book?.title);
+		setAuthorName(product?.book?.authorName);
+		setPublisher(product?.book?.publisher);
+		setPublicationYear(product?.book?.publicationYear);
+		setIsbn(product?.book?.isbn);
+		setPageNumber(product?.book?.pageNumber);
+		setPrice(product?.book?.price);
+		setGenres(product?.book?.genres);
+		setPurchasePrice(product?.book?.purchasePrice);
+		setQuantity(product?.book?.quantity);
+	}, [product]);
+
   const submitHandler = (e) => {
     e.preventDefault();
 
