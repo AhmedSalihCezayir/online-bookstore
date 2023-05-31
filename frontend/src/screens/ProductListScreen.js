@@ -107,24 +107,22 @@ const ProductListScreen = ({ history, match }) => {
                 <th>PRICE</th>
                 <th>GENRE</th>
                 <th>QTY</th>
-                <th>INVENTORY ID</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
               {products.map((product) => (
                 <tr key={product?.id}>
-                  <td>{product.book.id}</td>
-                  <td>{product.book.title}</td>
-                  <td>{product.book.authorName}</td>
-                  <td>{product.book.publisher}</td>
-                  <td>{product.book.publicationYear}</td>
-                  <td>{product.book.isbn}</td>
-                  <td>{product.book.pageNumber}</td>
-                  <td>${product.book.price}</td>
-                  <td>{product.book.genres.map(genre => genre.name).join(', ')}</td>
+                  <td>{product.book?.id}</td>
+                  <td>{product.book?.title}</td>
+                  <td>{product.book?.authorName}</td>
+                  <td>{product.book?.publisher}</td>
+                  <td>{product.book?.publicationYear}</td>
+                  <td>{product.book?.isbn}</td>
+                  <td>{product.book?.pageNumber}</td>
+                  <td>${product.book?.price}</td>
+                  <td>{product.book?.genres.map(genre => genre.name).join(', ')}</td>
                   <td>{product.quantity}</td>
-                  <td>{product.id}</td>
                   <td>
                     <LinkContainer to={`/admin/product/${product?.id}/edit`}>
                       <Button variant='light' className='btn-sm'>

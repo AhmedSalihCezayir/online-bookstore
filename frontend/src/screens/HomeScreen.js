@@ -200,8 +200,8 @@ const HomeScreen = ({ history, match }) => {
 				</div>
 			)}
       <Pagination>
-        <Pagination.Prev disabled={pageNumber === 1} onClick={() => setPageNumber(pageNumber - 1)} />
-        {Array.from({ length: pages }, (_, index) => (
+        <Pagination.Prev disabled={pageNumber === 0} onClick={() => setPageNumber(pageNumber - 1)} />
+        {/* {Array.from({ length: pages }, (_, index) => (
           <Pagination.Item
             key={index + 1}
             active={index + 1 === pageNumber}
@@ -209,7 +209,7 @@ const HomeScreen = ({ history, match }) => {
           >
             {index + 1}
           </Pagination.Item>
-        ))}
+        ))} */}
         <Pagination.Next disabled={pageNumber === pages} onClick={() => setPageNumber(pageNumber + 1)} />
       </Pagination>
 		</>
