@@ -64,7 +64,7 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
       console.log("URL", url)
       
       if(customerId){
-        const { data: wishList } = await axios.get(`http://localhost:8080/api/v1/customers/${customerId}/favourites`)
+        const { data: wishList } = await axios.get(`https://centered-motif-384420.uc.r.appspot.com/api/v1/customers/${customerId}/favourites`)
 
         const updatedBooks = data.content.map((book) => {
           const matchingWishlistItem = wishList.find((wishlistItem) => wishlistItem.book.id === book.id);
@@ -259,7 +259,7 @@ export const updateProduct = (product) => async (dispatch, getState) => {
 
     //get genres
     let genresInDB = await axios.get(
-      `http://localhost:8080/api/v1/genres`,
+      `https://centered-motif-384420.uc.r.appspot.com/api/v1/genres`,
     )
 
     genresInDB = genresInDB.data
