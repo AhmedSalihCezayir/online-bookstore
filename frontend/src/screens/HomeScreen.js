@@ -11,11 +11,11 @@ import AuthContext from '../AuthContext';
 import backendClient from '../config/axiosConfig';
 
 const HomeScreen = ({ history, match }) => {
-	const pageNumber = match.params.pageNumber || 1;
 	const dispatch = useDispatch();
 	const currentUser = useContext(AuthContext);
 	const currentUserID = currentUser?.id;
 
+	const [pageNumber, setPageNumber] = useState(match.params.pageNumber || 0); // New state variable to store the current page number
 	const [author, setAuthor] = useState('');
 	const [title, setTitle] = useState('');
 	const [publicationYear, setPublicationYear] = useState('');
@@ -23,6 +23,7 @@ const HomeScreen = ({ history, match }) => {
 	const [genreChoices, setGenreChoices] = useState([]); // New state variable to store the genre options from the database
 	const [filters, setFilters] = useState({});
 	const [selectedButton, setSelectedButton] = useState('popular'); // State variable to keep track of the selected button
+	const [sortingType, setSortingType] = useState(0); // State variable to keep track of the sorting type [0: popular, 1: new, 2: wishlist, 3:filters]
 
 	const productList = useSelector((state) => state.productList);
 	const { loading, error, products, page, pages } = productList;
@@ -34,8 +35,14 @@ const HomeScreen = ({ history, match }) => {
 	}, [history, currentUser])
 
 	useEffect(() => {
-		dispatch(listProducts(pageNumber, true, filters, null, currentUserID));
-	}, [dispatch, pageNumber, filters, currentUserID]);
+		let emptyFilters = {}
+		if(sortingType === 3) {
+			dispatch(listProducts(pageNumber, true, filters, sortingType, currentUserID));
+		}
+		else{
+			dispatch(listProducts(pageNumber, true, emptyFilters, sortingType, currentUserID));
+		}
+	}, [dispatch, pageNumber, filters, sortingType, currentUserID]);
 
 	useEffect(() => {
 		// Fetch genre options from the database
@@ -85,20 +92,17 @@ const HomeScreen = ({ history, match }) => {
 	const handleButtonClick = (button) => {
 		console.log("button: ", button)
 		setSelectedButton(button);
-		let sortingType;
-		const tempFilters = {};
 		// Update the product listing based on the selected button
 		if (button === 'filter') {
-			dispatch(listProducts(pageNumber, true, filters, null, currentUserID));
+			setSortingType(3);
 		} else {
 			if (button === 'popular') {
-				sortingType = 0;
+				setSortingType(0);
 			} else if (button === 'new') {
-				sortingType = 1;
+				setSortingType(1);
 			} else if (button === 'wishlist') {
-				sortingType = 2;
+				setSortingType(2);
 			}
-			dispatch(listProducts(pageNumber, true, tempFilters, sortingType, currentUserID));
 		}
 	};
 
@@ -196,7 +200,7 @@ const HomeScreen = ({ history, match }) => {
 				</div>
 			)}
       <Pagination>
-        <Pagination.Prev disabled={pageNumber === 1} onClick={() => handleButtonClick(pageNumber - 1)} />
+        <Pagination.Prev disabled={pageNumber === 1} onClick={() => setPageNumber(pageNumber - 1)} />
         {Array.from({ length: pages }, (_, index) => (
           <Pagination.Item
             key={index + 1}
@@ -206,7 +210,7 @@ const HomeScreen = ({ history, match }) => {
             {index + 1}
           </Pagination.Item>
         ))}
-        <Pagination.Next disabled={pageNumber === pages} onClick={() => handleButtonClick(pageNumber + 1)} />
+        <Pagination.Next disabled={pageNumber === pages} onClick={() => setPageNumber(pageNumber + 1)} />
       </Pagination>
 		</>
 	);
