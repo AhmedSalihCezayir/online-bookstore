@@ -10,11 +10,11 @@ import { listProducts } from '../actions/productActions';
 import AuthContext from '../AuthContext';
 
 const HomeScreen = ({ match }) => {
-	const pageNumber = match.params.pageNumber || 0;
 	const dispatch = useDispatch();
 	const currentUser = useContext(AuthContext);
 	const currentUserID = currentUser?.id;
 
+	const [pageNumber, setPageNumber] = useState(match.params.pageNumber || 0); // New state variable to store the current page number
 	const [author, setAuthor] = useState('');
 	const [title, setTitle] = useState('');
 	const [publicationYear, setPublicationYear] = useState('');
@@ -188,7 +188,7 @@ const HomeScreen = ({ match }) => {
 				</div>
 			)}
       <Pagination>
-        <Pagination.Prev disabled={pageNumber === 1} onClick={() => handleButtonClick(pageNumber - 1)} />
+        <Pagination.Prev disabled={pageNumber === 1} onClick={() => setPageNumber(pageNumber - 1)} />
         {Array.from({ length: pages }, (_, index) => (
           <Pagination.Item
             key={index + 1}
@@ -198,7 +198,7 @@ const HomeScreen = ({ match }) => {
             {index + 1}
           </Pagination.Item>
         ))}
-        <Pagination.Next disabled={pageNumber === pages} onClick={() => handleButtonClick(pageNumber + 1)} />
+        <Pagination.Next disabled={pageNumber === pages} onClick={() => setPageNumber(pageNumber + 1)} />
       </Pagination>
 		</>
 	);
