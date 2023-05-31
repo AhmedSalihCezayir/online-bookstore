@@ -62,9 +62,8 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
       }
     
       const { data } = await backendClient.get(url)
-      console.log("URL", url)
       
-      if(customerId){
+      if(customerId) {
         const { data: wishList } = await backendClient.get(`/api/v1/customers/${customerId}/favourites`)
 
         const updatedBooks = data.content.map((book) => {
@@ -74,22 +73,33 @@ export const listProducts = (pageNumber = 1, ifBook = true, filters = null, sort
 
         data.content.books = updatedBooks;
         totalPages = data.totalPages;
+        info = data.content.books
+      } else {
+        // data.content.books = data.content;
+        info = data.content;
+        totalPages = data.totalPages;
       }
 
-      info = data.content.books
+      
 
-      if(sortingType === 0){ //Sort by popularity
-        info = info.slice(0,20).sort((a, b) => (a.countVisit < b.countVisit ? 1 : -1))
-      }
+      if (info) {
+					if (sortingType === 0) {
+						//Sort by popularity
+						info = info.sort((a, b) => (a.countVisit < b.countVisit ? 1 : -1));
+					}
 
-      if(sortingType === 1){ //Sort by new 
-        info = info.slice(0, 20).sort((a, b) => (a.id < b.id ? 1 : -1))
-      }
+					if (sortingType === 1) {
+						//Sort by new
+						info = info.sort((a, b) => (a.id < b.id ? 1 : -1));
+					}
 
-      if(sortingType === 2){ //Sort by wishlist add time
-        info = info.filter((book) => book.wished)
-        info = info.slice(0, 20).sort((a, b) => (a.wishAddedAt < b.wishAddedAt ? 1 : -1))
-      }
+					if (sortingType === 2) {
+						//Sort by wishlist add time
+						info = info.filter((book) => book.wished);
+						info = info.sort((a, b) => (a.wishAddedAt < b.wishAddedAt ? 1 : -1));
+					}
+				}
+      
     }
 
     else {

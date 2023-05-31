@@ -160,9 +160,9 @@ const PlaceOrderScreen = ({ history }) => {
 										<>
 											<Col>
 												<span style={{ textDecoration: 'line-through' }}>
-													${cart.totalPrice}
+													${(cart.totalPrice).toFixed(2)}
 												</span>
-												&nbsp;&nbsp;&nbsp;&nbsp;-{discount}%
+												&nbsp;&nbsp;&nbsp;&nbsp;-{discount * 100}%
 											</Col>
 										</>
 									)}
@@ -173,7 +173,7 @@ const PlaceOrderScreen = ({ history }) => {
 									<Row>
 										<Col>Discounted Price</Col>
 										<Col style={{ fontWeight: 'bold' }}>
-											${cart.totalPrice - cart.totalPrice * (discount / 100)}
+											${(cart.totalPrice - cart.totalPrice * discount).toFixed(2)}
 										</Col>
 									</Row>
 								</ListGroup.Item>

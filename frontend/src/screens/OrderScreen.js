@@ -139,7 +139,7 @@ const OrderScreen = ({ match, history }) => {
 													<Link to={`/product/${item.product}`}>{item.book.title}</Link>
 												</Col>
 												<Col md={4}>
-													{item.quantity} x ${item.book.price} = ${item.quantity * item.book.price}
+													{item.quantity} x ${item.book.price} = ${(item.quantity * item.book.price).toFixed(2)}
 												</Col>
 											</Row>
 										</ListGroup.Item>

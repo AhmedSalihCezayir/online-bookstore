@@ -133,7 +133,7 @@ const ProfileScreen = ({ location, history }) => {
                 <tr key={order.id}>
                   <td>{order.id}</td>
                   <td>{order.orderDate.substring(0, 10)}</td>
-                  <td>${order.discountedPrice}</td>
+                  <td>${(order.discountedPrice).toFixed(2)}</td>
                   <td>{order.shipping ? 
                     (order.shipping.trackingNo) 
                     : (
