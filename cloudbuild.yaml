@@ -1,0 +1,12 @@
+steps:
+# Build and deploy the frontend
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['app', 'deploy', './frontend/app.yaml']
+  dir: 'frontend/'
+  id: 'Deploy Frontend'
+
+# Build and deploy the backend
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['app', 'deploy', './backend/app.yaml']
+  dir: 'backend/'
+  id: 'Deploy Backend'
