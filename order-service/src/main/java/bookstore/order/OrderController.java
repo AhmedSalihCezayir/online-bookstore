@@ -1,7 +1,7 @@
 package bookstore.order;
 
-import bookstore.commons.OrderDto;
-import bookstore.commons.OrderRequest;
+import bookstore.commons.dto.OrderDto;
+import bookstore.commons.dto.OrderRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -4,7 +4,7 @@ import bookstore.address.Address;
 import bookstore.address.AddressRepository;
 import bookstore.book.Book;
 import bookstore.book.BookRepository;
-import bookstore.commons.*;
+import bookstore.commons.dto.*;
 import bookstore.coupon.Coupon;
 import bookstore.coupon.CouponRepository;
 import bookstore.customer.Customer;

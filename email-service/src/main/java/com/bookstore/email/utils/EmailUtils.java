@@ -1,7 +1,7 @@
 package com.bookstore.email.utils;
 
-import bookstore.commons.OrderBookDto;
-import bookstore.commons.OrderDto;
+import bookstore.commons.dto.OrderBookDto;
+import bookstore.commons.dto.OrderDto;
 
 public class EmailUtils {
     public static String createEmailBody(OrderDto order) {
@@ -62,7 +62,7 @@ public class EmailUtils {
                 order.getShipping().getAddress().getCity(),
                 order.getShipping().getAddress().getState(),
                 order.getShipping().getAddress().getCountry(),
-                ""
+                order.getShipping().getCompany().toString()
         );
     }
 }

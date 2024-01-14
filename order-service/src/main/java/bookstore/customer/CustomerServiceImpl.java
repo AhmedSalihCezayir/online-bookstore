@@ -4,7 +4,7 @@ package bookstore.customer;
 import java.util.List;
 import java.util.Optional;
 
-import bookstore.commons.CustomerDto;
+import bookstore.commons.dto.CustomerDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

@@ -2,7 +2,7 @@ package bookstore.customer;
 
 import java.util.List;
 
-import bookstore.commons.CustomerDto;
+import bookstore.commons.dto.CustomerDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

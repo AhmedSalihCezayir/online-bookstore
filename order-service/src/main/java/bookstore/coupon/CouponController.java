@@ -1,6 +1,6 @@
 package bookstore.coupon;
 
-import bookstore.commons.CouponCheckRequest;
+import bookstore.commons.dto.CouponCheckRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

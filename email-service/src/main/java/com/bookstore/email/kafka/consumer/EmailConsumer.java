@@ -1,6 +1,6 @@
 package com.bookstore.email.kafka.consumer;
 
-import bookstore.commons.OrderDto;
+import bookstore.commons.dto.OrderDto;
 import com.bookstore.email.service.EmailService;
 import com.bookstore.email.utils.EmailUtils;
 import org.springframework.kafka.annotation.KafkaListener;

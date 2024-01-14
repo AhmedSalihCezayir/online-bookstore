@@ -1,6 +1,7 @@
 package bookstore.shipping;
 
 import bookstore.address.Address;
+import bookstore.commons.dto.ShippingDto;
 import bookstore.order.Order;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -15,12 +16,6 @@ import java.util.Random;
 @NoArgsConstructor
 @Entity
 public class Shipping {
-    public enum Company {
-        UPS,
-        DHL,
-        FedEx
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,14 +34,14 @@ public class Shipping {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Shipping.Company company;
+    private ShippingDto.Company company;
 
     public void generateTrackingNumber() {
         trackingNo = Long.valueOf(order.getId() + "" + System.currentTimeMillis());
     }
 
     public void assignCompany() {
-        Company[] companies = Company.values();
+        ShippingDto.Company[] companies = ShippingDto.Company.values();
         Random random = new Random();
         int index = random.nextInt(companies.length);
         company = companies[index];

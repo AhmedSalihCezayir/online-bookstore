@@ -1,6 +1,6 @@
 package bookstore.inventory;
 
-import bookstore.commons.InventoryRequest;
+import bookstore.commons.dto.InventoryRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

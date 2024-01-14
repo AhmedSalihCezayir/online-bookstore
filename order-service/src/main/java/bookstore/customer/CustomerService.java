@@ -1,6 +1,6 @@
 package bookstore.customer;
 
-import bookstore.commons.CustomerDto;
+import bookstore.commons.dto.CustomerDto;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package bookstore.commons;
+package bookstore.commons.dto;
 
 import lombok.Data;
 

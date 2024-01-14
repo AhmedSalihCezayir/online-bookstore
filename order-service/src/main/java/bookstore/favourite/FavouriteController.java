@@ -1,6 +1,6 @@
 package bookstore.favourite;
 
-import bookstore.commons.BookIdRequest;
+import bookstore.commons.dto.BookIdRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
