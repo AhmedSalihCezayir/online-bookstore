@@ -58,8 +58,11 @@ public class EmailUtils {
                 order.getOrderDate(),
                 productsHtml,
                 order.getTotalPrice(),
-                "",
-                "", "", "", ""
+                order.getShipping().getAddress().getStreetAddress(),
+                order.getShipping().getAddress().getCity(),
+                order.getShipping().getAddress().getState(),
+                order.getShipping().getAddress().getCountry(),
+                ""
         );
     }
 }
