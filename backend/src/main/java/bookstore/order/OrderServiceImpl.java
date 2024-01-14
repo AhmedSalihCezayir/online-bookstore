@@ -20,6 +20,7 @@ import bookstore.shipping.ShippingRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -48,6 +49,8 @@ public class OrderServiceImpl implements OrderService{
     private final BookRepository bookRepository;
 
     private final InventoryRepository inventoryRepository;
+
+    private final KafkaTemplate<String, OrderDto> kafkaTemplate;
 
     @Override
     public List<OrderDto> getOrdersByCustomer(Long customerId) {
@@ -123,7 +126,12 @@ public class OrderServiceImpl implements OrderService{
         savedOrder.setPayment(savedPayment);
         savedOrder.setShipping(savedShipping);
         savedOrder.setOrderBooks(orderBooks);
-        return mapOrderToDto(savedOrder);
+
+        OrderDto orderDto = mapOrderToDto(savedOrder);
+
+        kafkaTemplate.send("order_created", orderDto);
+        System.out.println("Message sent!");
+        return orderDto;
     }
 
     private OrderDto mapOrderToDto(Order order) {
